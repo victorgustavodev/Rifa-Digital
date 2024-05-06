@@ -1,13 +1,16 @@
 import Navbar from "../../components/navbar";
 import { Ticket, Star } from "lucide-react";
 import Carro from "../../assets/car.png";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import api from "../../services/api";
 
 export default function Home() {
+  const [products, setProducts] = useState([]);
+
   const getInfo = async () => {
     try {
       const response = await api.get("/products/getproducts");
+      setProducts(response.data);
       console.log(response.data);
     } catch (error) {
       console.log(error.message);
@@ -32,6 +35,11 @@ export default function Home() {
         <Star /> <p>Últimos Sorteios</p>
       </div>
       <div></div>
+
+      {products.length > 0 &&
+        products?.map((item) => (
+          <img key={item._id} src={item.Image} alt="Imagem teste" />
+        ))}
     </div>
   );
 }

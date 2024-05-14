@@ -1,14 +1,19 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/home';
-import Campaign from './pages/campaign';
+import Item from './pages/item/index';
+import ItemFinalizado from './pages/itemFinalizado/index';
+import Checkout from './pages/checkout/index'
+
 
 function App() {
+  
   return (
     <BrowserRouter>
         <Routes>
             <Route path='/' element={<Home/>} />
-            <Route path='/produto' element={<Campaign/>} />
-            <Route path='*' element={<h1>Not Found</h1>} />
+            <Route path='/item/:id' element={<Item/>} />
+            <Route path='/item-finalizado/:id' element={<ItemFinalizado/>} />
+            <Route path='/checkout/' element={<Checkout/>}/>
         </Routes> 
     </BrowserRouter>
   );

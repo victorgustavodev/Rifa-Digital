@@ -1,0 +1,104 @@
+import { Megaphone, Menu, ShoppingCart, X } from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const toggleModal = () => {
+    setOpenModal(!openModal);
+  };
+
+  const handlePhoneNumberChange = (e) => {
+    let input = e.target.value;
+    // Remove all characters except digits
+    input = input.replace(/\D/g, "");
+    // Limit to 11 characters
+    input = input.substring(0, 11);
+    // Add parentheses, space, and hyphen
+    if (input.length > 2) {
+      input = `(${input.substring(0, 2)}) ${input.substring(2)}`;
+    }
+    if (input.length > 9) {
+      input = `${input.substring(0, 10)}-${input.substring(10)}`;
+    }
+    setPhoneNumber(input);
+  };
+
+  const handleSubmit = () => {
+    // Implement your submit logic here
+    console.log("Phone number:", phoneNumber);
+    // You may want to perform some action like submitting the phone number
+  };
+
+  return (
+    <div className="flex justify-center items-center border-b-[0.5px] border-gray-200 bg-white z-50">
+      <div className="flex justify-between p-4 items-center min-h-[77px] max-w-[1120px] w-full h-full">
+        <Link to={"/"}>
+          <span className="uppercase text-lg font-bold">dujão du corte</span>
+        </Link>
+        <div className="sm:hidden">
+          <button className="flex items-center" onClick={toggleMenu}>
+            {menuOpen ? <X size={30}/> : <Menu size={30} />}
+          </button>
+        </div>
+
+        <div className="hidden sm:block">
+          <div className="flex gap-5">
+            <div className="hidden sm:block">
+              <button className="flex gap-2 text-black bg-zinc-200 rounded-xl p-3 text-sm font-semibold transition-all hover:bg-zinc-300" onClick={toggleModal}>
+                <ShoppingCart size={20} /> Ver meus bilhetes
+              </button>
+            </div>
+            <div className="hidden sm:block">
+              <button className="flex gap-2 bg-zinc-200 rounded-xl p-3 text-sm font-semibold transition-all hover:bg-zinc-300">
+                <Megaphone size={20} /> Campanhas
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Menu mobile */}
+        {menuOpen && (
+          <div className="sm:hidden absolute right-0 top-[77px] bg-zinc-100 w-screen h-screen">
+            <div className="flex flex-col items-center py-10 gap-5 h-3/5 px-10">
+              <button className="flex gap-2 text-black bg-zinc-200 rounded-xl p-5 text-base font-semibold transition-all w-full hover:bg-zinc-300" onClick={toggleModal}>
+                <ShoppingCart size={20} /> Ver meus bilhetes
+              </button>
+              <button className="flex gap-2 bg-zinc-200 rounded-xl p-5 text-base font-semibold transition-all w-full hover:bg-zinc-300">
+                <Megaphone size={20} /> Campanhas
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Modal */}
+        {openModal && (
+          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white p-8 rounded-lg max-w-[300px] md:max-w-none">
+              <h2 className="text-2xl font-bold mb-4">Ver meus bilhetes</h2>
+              <input
+                type="tel"
+                placeholder="(00) 12345-6789"
+                value={phoneNumber}
+                onChange={handlePhoneNumberChange}
+                className="w-full border border-gray-300 rounded-md p-2 mb-4"
+                maxLength="15" //
+              />
+              <button className="mt-4 bg-zinc-200 text-black rounded-lg py-2 px-4 hover:bg-zinc-300" onClick={handleSubmit}>Buscar</button>
+              <button className="ml-2 mt-4 bg-zinc-200 text-black rounded-lg py-2 px-4 hover:bg-zinc-300" onClick={toggleModal}>Fechar</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default Navbar;

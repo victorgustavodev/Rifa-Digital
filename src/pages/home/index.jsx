@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { ShoppingBagIcon } from "lucide-react";
 import { TbClover } from "react-icons/tb";
 import Loading from "../../globalComponents/loading";
-import Footer from './../../globalComponents/Footer';
+import Footer from "./../../globalComponents/Footer";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -14,15 +14,14 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get("/products/getproducts");
+        const response = await api.get("/getproducts/all");
         setProducts(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error) {
         console.log(error.message);
       }
     };
     fetchData();
-    
   }, []);
   return (
     <div className="flex flex-col bg-zinc-100">
@@ -56,13 +55,12 @@ export default function Home() {
                         </span>
                       </span>
                       <Link key={item._id} to={`/item/${item._id}`}>
-                      <button className="bg-green-500 flex gap-3 justify-center items-center w-full text-white rounded-md p-3 text-md transition-all hover:bg-green-600 hover:scale-[1.01]">
-                        <ShoppingBagIcon className="h-5 w-5" /> Participar da
-                        Campanha
-                      </button>
-                    </Link>
+                        <button className="bg-green-500 flex gap-3 justify-center items-center w-full text-white rounded-md p-3 text-md transition-all hover:bg-green-600 hover:scale-[1.01]">
+                          <ShoppingBagIcon className="h-5 w-5" /> Participar da
+                          Campanha
+                        </button>
+                      </Link>
                     </div>
-
                   </div>
                 </div>
               </div>
@@ -75,9 +73,9 @@ export default function Home() {
                 <img className="w-[345px] h-[250px] sm:w-[424px] lg:w-[660px] lg:h-[385px] bg-zinc-300 rounded-md" />
                 <div className="flex flex-col gap-5">
                   <div className="flex flex-col gap-3 h-1/2 lg:min-w-[408px] lg:min-h-64 border-[1px] border-zinc-400 rounded-md">
-                  <div className="flex justify-center pt-10">
-          <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
-        </div>
+                    <div className="flex justify-center pt-10">
+                      <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
+                    </div>
                     <span className="flex gap-3 text-gray-500 items-center p-2 lg:p-4">
                       <span className="bg-black bg-opacity-10 text-black w-[73px] h-[26px] flex justify-center items-center rounded-md text-sm"></span>
                     </span>
@@ -91,16 +89,13 @@ export default function Home() {
       <>
         <div className="flex gap-2 items-center justify-center">
           <div className="max-w-[1120px] lg:min-w-[1000px] flex gap-2 items-center">
-          <TbClover size={24} />
-          <p className="font-medium text-xl py-5">Últimos Sorteios</p>
+            <TbClover size={24} />
+            <p className="font-medium text-xl py-5">Últimos Sorteios</p>
           </div>
         </div>
         {products.length > 0 ? (
           products.map((item) => (
-            <section
-              key={item._id}
-              className="w-screen flex justify-center"
-            >
+            <section key={item._id} className="w-screen flex justify-center">
               <div className="max-w-[1120px] lg:min-w-[1000px] flex flex-col sm:gap-5">
                 <div className="flex gap-2 sm:gap-4 md:gap-6 w-[345px] h-[100px] sm:w-[422px] sm:h-auto lg:w-auto items-center py-5 overflow-hidden">
                   <img
@@ -127,11 +122,11 @@ export default function Home() {
             </section>
           ))
         ) : (
-          <Loading/>
+          <Loading />
         )}
       </>
       <BtnWhatsapp />
-      <Footer/>
+      <Footer />
     </div>
   );
 }

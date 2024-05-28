@@ -34,13 +34,13 @@ function Index() {
   });
 
   const [phone, setPhone] = useState("");
-  const { id, price } = useParams();
+  const { id, ammount } = useParams();
   const [product, setProduct] = useState(null);
 
   const onSubmit = () => {
     const { name, phone, email } = getValues();
     if (!name || !phone || !email) return;
-    router(`/payments/${id}/${phone}/${price}`);
+    router(`/payments/${id}/${phone}/${ammount / product.price}`);
   };
 
   const handlePhoneChange = (e) => {
@@ -59,7 +59,7 @@ function Index() {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const response = await api.get(`/products/${id}`);
+        const response = await api.get(`/findproducts/${id}`);
         setProduct(response.data);
       } catch (error) {
         console.log(error.message);
@@ -93,43 +93,53 @@ function Index() {
                       <h1 className="text-xl font-bold">Dados pessoais</h1>
                     </span>
 
-                    <form onSubmit={handleSubmit(onSubmit())}>
-                      <div className="flex flex-col gap-3">
-                        <p>Nome Completo</p>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                      <div className="flex flex-col gap-4 mb-6">
+                        <label className="font-semibold">Nome Completo</label>
                         <input
                           {...register("name")}
                           type="text"
                           placeholder="Digite seu nome e sobrenome"
-                          className="w-full bg-zinc-100 rounded-md p-2 "
+                          className="w-full bg-zinc-100 rounded-md p-2"
                         />
                         {errors.name && (
-                          <p className="text-red-500 pb-4">{errors.name.message}</p>
+                          <p className="text-red-500 mt-2">
+                            {errors.name.message}
+                          </p>
                         )}
                       </div>
-                      <div className="flex flex-col gap-3">
-                        <p>Telefone com DDD</p>
+                      <div className="flex flex-col gap-4 mb-6">
+                        <label className="font-semibold">
+                          Telefone com DDD
+                        </label>
                         <input
                           {...register("phone")}
                           type="tel"
                           placeholder="(81) 12345-6789"
                           value={phone}
                           onChange={handlePhoneChange}
-                          className="w-full bg-zinc-100 rounded-md p-2 "
+                          className="w-full bg-zinc-100 rounded-md p-2"
                         />
                         {errors.phone && (
-                          <p className="text-red-500 pb-4">{errors.phone.message}</p>
+                          <p className="text-red-500 mt-2">
+                            {errors.phone.message}
+                          </p>
                         )}
                       </div>
-                      <div className="flex flex-col gap-3">
-                        <p>Endereço de e-mail</p>
+                      <div className="flex flex-col gap-4 mb-6">
+                        <label className="font-semibold">
+                          Endereço de e-mail
+                        </label>
                         <input
                           {...register("email")}
                           type="email"
                           placeholder="Digite seu e-mail"
-                          className="w-full bg-zinc-100 rounded-md p-2 "
+                          className="w-full bg-zinc-100 rounded-md p-2"
                         />
                         {errors.email && (
-                          <p className="text-red-500 pb-4">{errors.email.message}</p>
+                          <p className="text-red-500 mt-2">
+                            {errors.email.message}
+                          </p>
                         )}
                       </div>
                       <div className="pt-3 lg:pt-10 flex w-full justify-end">
@@ -146,9 +156,14 @@ function Index() {
                 {/* right */}
                 <div className="bg-white w-full flex flex-col gap-8 p-6 lg:p-20 lg:items-start">
                   <div className="flex items-center rounded-xl w-full shadow-sm border-">
-                    <img src={product.image} alt="" className="max-w-32 min-w-32"/>
-                    <div className="p-3">
+                    <img
+                      src={product.image}
+                      alt=""
+                      className="max-w-32 min-w-32"
+                    />
+                    <div className="p-3 flex flex-col gap-3">
                       <p className="text-base leading-tight">{product.name}</p>
+                      <p className="font-bold">Quantidade: {ammount} </p>
                     </div>
                   </div>
                   <div className="flex gap-5 flex-col w-full">
@@ -163,20 +178,22 @@ function Index() {
 
                     <div className="flex justify-between w-full">
                       <span>Subtotal</span>
-                      <span>
-                        {Number(price).toLocaleString("pt-BR", {
-                          style: "currency",
-                          currency: "BRL",
-                        })}
-                      </span>
+
+                      {Number(ammount * product.price).toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      })}
                     </div>
                     <div className="flex justify-between w-full font-bold">
                       <span>Total</span>
                       <span>
-                        {Number(price).toLocaleString("pt-BR", {
-                          style: "currency",
-                          currency: "BRL",
-                        })}
+                        {Number(ammount * product.price).toLocaleString(
+                          "pt-BR",
+                          {
+                            style: "currency",
+                            currency: "BRL",
+                          }
+                        )}
                       </span>
                     </div>
                   </div>

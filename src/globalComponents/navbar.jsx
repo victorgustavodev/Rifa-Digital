@@ -1,17 +1,22 @@
 import { Megaphone, Menu, ShoppingCart, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import api from "../services/api";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [numbersUser, setNumberUser] = useState([]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
   const toggleModal = () => {
+    if (openModal) {
+      setNumberUser([]);
+    }
     setOpenModal(!openModal);
   };
 
@@ -31,10 +36,13 @@ function Navbar() {
     setPhoneNumber(input);
   };
 
-  const handleSubmit = () => {
-    // Implement your submit logic here
-    console.log("Phone number:", phoneNumber);
-    // You may want to perform some action like submitting the phone number
+  const handleSubmit = async () => {
+    try {
+      const { data } = await api.get(`/getnumbers/${phoneNumber}`);
+      setNumberUser(data);
+    } catch (error) {
+      console.error("Erro ao buscar número:", error);
+    }
   };
 
   return (
@@ -45,14 +53,17 @@ function Navbar() {
         </Link>
         <div className="sm:hidden">
           <button className="flex items-center" onClick={toggleMenu}>
-            {menuOpen ? <X size={30}/> : <Menu size={30} />}
+            {menuOpen ? <X size={30} /> : <Menu size={30} />}
           </button>
         </div>
 
         <div className="hidden sm:block">
           <div className="flex gap-5">
             <div className="hidden sm:block">
-              <button className="flex gap-2 text-black bg-zinc-200 rounded-xl p-3 text-sm font-semibold transition-all hover:bg-zinc-300" onClick={toggleModal}>
+              <button
+                className="flex gap-2 text-black bg-zinc-200 rounded-xl p-3 text-sm font-semibold transition-all hover:bg-zinc-300"
+                onClick={toggleModal}
+              >
                 <ShoppingCart size={20} /> Ver meus bilhetes
               </button>
             </div>
@@ -68,7 +79,10 @@ function Navbar() {
         {menuOpen && (
           <div className="sm:hidden absolute right-0 top-[77px] bg-zinc-100 w-screen h-screen">
             <div className="flex flex-col items-center py-10 gap-5 h-3/5 px-10">
-              <button className="flex gap-2 text-black bg-zinc-200 rounded-xl p-5 text-base font-semibold transition-all w-full hover:bg-zinc-300" onClick={toggleModal}>
+              <button
+                className="flex gap-2 text-black bg-zinc-200 rounded-xl p-5 text-base font-semibold transition-all w-full hover:bg-zinc-300"
+                onClick={toggleModal}
+              >
                 <ShoppingCart size={20} /> Ver meus bilhetes
               </button>
               <button className="flex gap-2 bg-zinc-200 rounded-xl p-5 text-base font-semibold transition-all w-full hover:bg-zinc-300">
@@ -81,7 +95,7 @@ function Navbar() {
         {/* Modal */}
         {openModal && (
           <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-8 rounded-lg max-w-[300px] md:max-w-none">
+            <div className="bg-white p-8 rounded-lg max-w-[300px] md:max-w-none min-h-[200px] max-h-[80vh] overflow-y-auto">
               <h2 className="text-2xl font-bold mb-4">Ver meus bilhetes</h2>
               <input
                 type="tel"
@@ -89,10 +103,35 @@ function Navbar() {
                 value={phoneNumber}
                 onChange={handlePhoneNumberChange}
                 className="w-full border border-gray-300 rounded-md p-2 mb-4"
-                maxLength="15" //
+                maxLength="15"
               />
-              <button className="mt-4 bg-zinc-200 text-black rounded-lg py-2 px-4 hover:bg-zinc-300" onClick={handleSubmit}>Buscar</button>
-              <button className="ml-2 mt-4 bg-zinc-200 text-black rounded-lg py-2 px-4 hover:bg-zinc-300" onClick={toggleModal}>Fechar</button>
+
+              {numbersUser.length > 0 && (
+                <div>
+                  <ul>
+                    {numbersUser.map((num, index) => (
+                      <li key={index}>
+                        <h3>
+                          {num.name}: {num.numbers.join(", ")}
+                        </h3>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <button
+                className="mt-4 bg-zinc-200 text-black rounded-lg py-2 px-4 hover:bg-zinc-300"
+                onClick={handleSubmit}
+              >
+                Buscar
+              </button>
+              <button
+                className="ml-2 mt-4 bg-zinc-200 text-black rounded-lg py-2 px-4 hover:bg-zinc-300"
+                onClick={toggleModal}
+              >
+                Fechar
+              </button>
             </div>
           </div>
         )}

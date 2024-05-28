@@ -14,11 +14,10 @@ function Item() {
   const [product, setProduct] = useState(null);
 
   const { id } = useParams();
-
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const response = await api.get(`/products/${id}`);
+        const response = await api.get(`/findproducts/${id}`);
         setProduct(response.data);
         setPrice(response.data.price);
       } catch (error) {
@@ -54,7 +53,7 @@ function Item() {
               <div className="flex gap-5">
                 <img className="rounded-md lg:w-full" src={product.image} />
               </div>
-              <div className="flex flex-col gap-3 h-1/2 font-semibold border-zinc-400 rounded-xl bg-white rounded-md">
+              <div className="flex flex-col gap-3 h-1/2 font-semibold border-zinc-400  bg-white rounded-md">
                 <p className="font-bold lg:text-3xl overflow-hidden border-b-[1px] border-zinc-300 p-2 lg:p-4">
                   {product.name}
                 </p>

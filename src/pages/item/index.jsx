@@ -12,7 +12,6 @@ import Footer from "../../globalComponents/Footer";
 
 function Item() {
   const [quantity, setQuantity] = useState(1);
-  const [price, setPrice] = useState(0);
   const [product, setProduct] = useState(null);
 
   const { id } = useParams();
@@ -22,7 +21,6 @@ function Item() {
       try {
         const response = await api.get(`/products/${id}`);
         setProduct(response.data);
-        setPrice(response.data.price);
       } catch (error) {
         console.log(error.message);
       }
@@ -45,10 +43,10 @@ function Item() {
     if (!isNaN(value) && value >= 1) {
       setQuantity(value);
     }
-  };
+  };  
 
   const priceTotal = () => {
-    const totalPrice = quantity * price;
+    const totalPrice = quantity * product.price;
     return totalPrice.toFixed(2);
   };
 
@@ -79,16 +77,16 @@ function Item() {
               <div className="flex items-center justify-center gap-3">
                 <span className="text-center font-bold">Compartilhar</span>
                 <div className="flex gap-2 items-center">
-                  <a href="">
+                  <a href="" className="hover:scale-90">
                     <BsWhatsapp color="green" size={24} />
                   </a>
-                  <a href="">
+                  <a href="" className="hover:scale-90">
                     <FaFacebookSquare color="#3B579D" size={24} />
                   </a>
-                  <a href="">
+                  <a href="" className="hover:scale-90">
                     <PiTelegramLogo size={24} />
                   </a>
-                  <a href="">
+                  <a href="" className="hover:scale-90">
                     <BsTwitterX size={24} />
                   </a>
                 </div>
@@ -149,14 +147,14 @@ function Item() {
                 </div>
 
                 <Link
-                  to={`/checkout/${id}?price=${priceTotal()}`}
+                  to={`/checkout/${id}/${priceTotal()}`}
                   className="flex items-center justify-center gap-3 rounded-md text-white py-3 bg-[#089616]"
                 >
                   <ShoppingCart />
                   Participar
                   <span>
                     (
-                    {(quantity * price).toLocaleString("pt-BR", {
+                    {(quantity * product.price).toLocaleString("pt-BR", {
                       style: "currency",
                       currency: "BRL",
                     })}

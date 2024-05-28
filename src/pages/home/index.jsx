@@ -41,8 +41,8 @@ export default function Home() {
                     src={item.image}
                     alt="Product"
                   />
-                  <div className="flex flex-col gap-5 items-center">
-                    <div className="flex flex-col gap-3 h-1/2 lg:bg-white shadow-md  w-full rounded-md">
+                  <div className="flex flex-col gap-5 items-center ">
+                    <div className="flex flex-col gap-3 p-5 shadow-md rounded-md ">
                       <p className="font-bold lg:text-3xl overflow-hidden border-b-[1px]  border-zinc-300 p-2 lg:p-4">
                         {item.name}
                       </p>
@@ -55,13 +55,14 @@ export default function Home() {
                           })}
                         </span>
                       </span>
-                    </div>
-                    <Link key={item._id} to={`/item/${item._id}`}>
-                      <button className="bg-green-500 flex gap-3 justify-center text-white rounded-md p-3 text-sm font-semibold transition-all hover:bg-green-600 hover:scale-[1.01]">
+                      <Link key={item._id} to={`/item/${item._id}`}>
+                      <button className="bg-green-500 flex gap-3 justify-center items-center w-full text-white rounded-md p-3 text-md transition-all hover:bg-green-600 hover:scale-[1.01]">
                         <ShoppingBagIcon className="h-5 w-5" /> Participar da
                         Campanha
                       </button>
                     </Link>
+                    </div>
+
                   </div>
                 </div>
               </div>
@@ -73,7 +74,7 @@ export default function Home() {
               <div className="flex flex-col lg:flex-row gap-5">
                 <img className="w-[345px] h-[250px] sm:w-[424px] lg:w-[660px] lg:h-[385px] bg-zinc-300 rounded-md" />
                 <div className="flex flex-col gap-5">
-                  <div className="flex flex-col gap-3 h-1/2 lg:bg-white border-[1px] border-zinc-400 rounded-md">
+                  <div className="flex flex-col gap-3 h-1/2 lg:min-w-[408px] lg:min-h-64 border-[1px] border-zinc-400 rounded-md">
                   <div className="flex justify-center pt-10">
           <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
         </div>

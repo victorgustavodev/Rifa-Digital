@@ -2,24 +2,72 @@ import { IoHomeSharp } from "react-icons/io5";
 import api from "../../services/api";
 import Loading from "../../globalComponents/loading";
 import { useEffect, useState } from "react";
-import { Crown, Pencil, Trash } from "lucide-react";
+import { Pencil, Trash, LogOutIcon } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const schema = z.object({
+  name: z
+    .string()
+    .min(5, { message: "O nome da rifa deve conter no minímo 5 caractéres" }),
+  price: z.preprocess(
+    (a) => parseFloat(z.string().parse(a)),
+    z.number().min(0.1, { message: "Informe um preço válido, maior que 0." })
+  ),
+  totalBilhetes: z.preprocess(
+    (a) => parseFloat(z.string().parse(a)),
+    z.number().min(1000, {
+      message: "Informe um total de bilhetes, maior ou igual a 1000.",
+    })
+  ),
+});
 
 function Index() {
+  const {
+    reset,
+    register,
+    formState: { errors },
+    clearErrors,
+  } = useForm({
+    mode: "all",
+    reValidateMode: "onChange",
+    resolver: zodResolver(schema),
+  });
+
   const [products, setProducts] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
   const [creatingCampaign, setCreatingCampaign] = useState(false);
   const [imageURL, setImageURL] = useState(null);
-  const [maxImageSize] = useState(70000); // Tamanho máximo em bytes (70KB)
+  const [maxImageSize] = useState(200 * 1024); // Tamanho máximo em bytes (70KB)
   const [currentImageSize, setCurrentImageSize] = useState(null);
   const [token, setToken] = useState("");
   const [Autenticated, setAutenticated] = useState();
+
   const navigate = useNavigate();
+
+  const formatFileSize = (size) => {
+    if (size < 1024) {
+      return `${size.toFixed(2)} B`;
+    } else if (size >= 1024 && size < 1024 * 1024) {
+      return `${(size / 1024).toFixed(2)} KB`;
+    } else if (size >= 1024 * 1024 && size < 1024 * 1024 * 1024) {
+      return `${(size / (1024 * 1024)).toFixed(2)} MB`;
+    } else {
+      return `${(size / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+    }
+  };
 
   useEffect(() => {
     const jwt = localStorage.getItem("authToken");
     setToken(jwt);
   }, [setToken]);
+
+  const Logout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/login");
+  };
 
   useEffect(() => {
     const authenticateUser = async () => {
@@ -98,16 +146,13 @@ function Index() {
 
   const deleteProduct = async (productId) => {
     try {
-      const response = await api.delete(
-        `/deleteproduct/${productId}`,
-        {},
-        {
-          headers: {
-            Authorization: `${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await api.delete(`/deleteproduct/${productId}`, {
+        headers: {
+          Authorization: `${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
       if (response.status === 403) {
         setAutenticated(false);
       } else if (response.status === 200) {
@@ -133,48 +178,48 @@ function Index() {
   const updateProduct = async () => {
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
-    formDataToSend.append("price", formData.price);
+    formDataToSend.append("price", parseFloat(formData.price).toFixed(2));
     formDataToSend.append("status", formData.status);
+    formDataToSend.append(
+      "totalBilhetes",
+      parseFloat(formData.totalBilhetes).toFixed(2)
+    );
 
     if (formData.image) {
-      const reader = new FileReader();
-      if (formData.image.size > 70000) {
+      if (formData.image.size > 200 * 1024) {
         return;
       }
 
-      reader.readAsDataURL(formData.image);
-      reader.onloadend = async () => {
-        const base64Image = reader.result;
-        formDataToSend.append("image", base64Image);
-        try {
-          const response = await api.put(
-            `/updateproduct/${editingProduct._id}`,
-            formDataToSend,
-            {
-              headers: {
-                Authorization: `${token}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
+      formDataToSend.append("image", formData.image);
 
-          if (response.status === 403) {
-            setAutenticated(false);
-          } else if (response.status === 200) {
-            setAutenticated(true);
+      try {
+        const response = await api.put(
+          `/updateproduct/${editingProduct._id}`,
+          formDataToSend,
+          {
+            headers: {
+              Authorization: `${token}`,
+              "Content-Type": "multipart/form-data",
+            },
           }
+        );
 
-          setProducts(
-            products.map((product) =>
-              product._id === editingProduct._id ? response.data : product
-            )
-          );
-          clearFormFields();
-          setEditingProduct(null);
-        } catch (error) {
+        if (response.status === 403) {
           setAutenticated(false);
+        } else if (response.status === 200) {
+          setAutenticated(true);
         }
-      };
+
+        setProducts(
+          products.map((product) =>
+            product._id === editingProduct._id ? response.data : product
+          )
+        );
+        clearFormFields();
+        setEditingProduct(null);
+      } catch (error) {
+        setAutenticated(false);
+      }
     } else {
       try {
         const response = await api.put(
@@ -210,12 +255,15 @@ function Index() {
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
     formDataToSend.append("price", parseFloat(formData.price).toFixed(2));
-    formDataToSend.append("totalBilhetes", formData.totalBilhetes);
+    formDataToSend.append(
+      "totalBilhetes",
+      parseFloat(formData.totalBilhetes).toFixed(2)
+    );
     formDataToSend.append("status", formData.status);
 
     if (formData.image) {
       const reader = new FileReader();
-      if (formData.image.size > 70000) {
+      if (formData.image.size > 200 * 1024) {
         return;
       }
 
@@ -227,9 +275,10 @@ function Index() {
           const response = await api.post("/createproduct", formDataToSend, {
             headers: {
               Authorization: `${token}`,
-              "Content-Type": "application/json",
+              "Content-Type": "multipart/form-data",
             },
           });
+
           if (response.status === 403) {
             setAutenticated(false);
           } else if (response.status === 200) {
@@ -245,13 +294,21 @@ function Index() {
       };
     } else {
       try {
-        const response = await api.post("/createproduct", formDataToSend);
+        const response = await api.post("/createproduct", formDataToSend, {
+          headers: {
+            Authorization: `${token}`,
+            "Content-Type": "application/json",
+          },
+        });
         setProducts([...products, response.data]);
         setCreatingCampaign(false);
       } catch (error) {
         console.log(error.message);
       }
     }
+
+    reset();
+    clearErrors();
   };
 
   return (
@@ -285,9 +342,10 @@ function Index() {
               <h1 className="text-[30px] uppercase font-bold">
                 Dashboard admin
               </h1>
-              <Crown
+              <LogOutIcon
+                onClick={Logout}
                 size={40}
-                className="cursor-pointer hover:text-yellow-600 transition-all"
+                className="cursor-pointer hover:text-red-400 transition-all"
               />
             </header>
             <main className="p-10 text-black flex flex-col gap-3">
@@ -295,7 +353,10 @@ function Index() {
                 <h1 className="text-[30px] text-white">Minhas campanhas</h1>
                 <button
                   className="select-none text-md font-semibold uppercase bg-violet-800 px-5 py-3 rounded-md text-white transition-all hover:bg-violet-500"
-                  onClick={() => setCreatingCampaign(true)}
+                  onClick={() => {
+                    setCreatingCampaign(true);
+                    reset();
+                  }}
                 >
                   Criar campanha
                 </button>
@@ -378,7 +439,11 @@ function Index() {
                           : "N/A"}
                       </p>
                       <div className="flex gap-5 items-center">
-                        <button onClick={() => editProduct(item)}>
+                        <button
+                          onClick={() => {
+                            editProduct(item);
+                          }}
+                        >
                           <Pencil className="hover:text-green-600 transition-all" />
                         </button>
                         <button onClick={() => deleteProduct(item._id)}>
@@ -407,6 +472,7 @@ function Index() {
                   <div className="mb-4">
                     <label className="block text-sm font-bold mb-2">Nome</label>
                     <input
+                      {...register("name")}
                       type="text"
                       value={formData.name}
                       onChange={(e) =>
@@ -414,22 +480,58 @@ function Index() {
                       }
                       className="w-full p-2 border rounded"
                     />
+                    {errors.name && (
+                      <p className="text-red-500 mt-2">{errors.name.message}</p>
+                    )}
                   </div>
                   <div className="mb-4">
                     <label className="block text-sm font-bold mb-2">
                       Preço
                     </label>
                     <input
+                      {...register("price")}
+                      value={formData.price === null ? "" : formData.price}
                       type="number"
-                      value={formData.price}
+                      step="0.01"
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          price: parseFloat(e.target.value),
+                          price:
+                            e.target.value === ""
+                              ? null
+                              : Number(e.target.value),
                         })
                       }
                       className="w-full p-2 border rounded"
                     />
+
+                    {errors.price && (
+                      <p className="text-red-500 mt-2">
+                        {errors.price.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-sm font-bold mb-2">
+                      Total de Bilhetes
+                    </label>
+                    <input
+                      {...register("totalBilhetes")}
+                      type="number"
+                      value={Number(formData.totalBilhetes)}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          totalBilhetes: Number(e.target.value),
+                        })
+                      }
+                      className="w-full p-2 border rounded"
+                    />
+                    {errors.totalBilhetes && (
+                      <p className="text-red-500 mt-2">
+                        {errors.totalBilhetes.message}
+                      </p>
+                    )}
                   </div>
                   <div className="mb-4">
                     <label className="block text-sm font-bold mb-2">
@@ -486,9 +588,8 @@ function Index() {
                           currentImageSize > maxImageSize ? "text-red-400" : ""
                         }`}
                       >
-                        Tamanho atual:{" "}
-                        {Math.round(Number(currentImageSize) / 1024).toFixed(2)}{" "}
-                        KB / {Math.round(maxImageSize / 1024)} KB
+                        Tamanho atual: {formatFileSize(currentImageSize)} /{" "}
+                        {formatFileSize(maxImageSize)}
                       </p>
                     )}
                     {imageURL && (
@@ -505,6 +606,7 @@ function Index() {
                       onClick={() => {
                         setEditingProduct(null);
                         clearFormFields();
+                        reset();
                       }}
                       className="bg-red-400 text-white px-4 py-2 rounded mr-2 hover:bg-red-500 transition-all"
                     >
@@ -535,6 +637,7 @@ function Index() {
                   <div className="mb-4">
                     <label className="block text-sm font-bold mb-2">Nome</label>
                     <input
+                      {...register("name")}
                       type="text"
                       value={formData.name}
                       onChange={(e) =>
@@ -542,38 +645,55 @@ function Index() {
                       }
                       className="w-full p-2 border rounded"
                     />
+                    {errors.name && (
+                      <p className="text-red-500 mt-2">{errors.name.message}</p>
+                    )}
                   </div>
                   <div className="mb-4">
                     <label className="block text-sm font-bold mb-2">
                       Preço
                     </label>
                     <input
+                      {...register("price")}
                       type="number"
-                      value={formData.price}
+                      step="0.01"
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          price: parseFloat(e.target.value),
+                          price:
+                            e.target.value === ""
+                              ? null
+                              : Number(e.target.value),
                         })
                       }
                       className="w-full p-2 border rounded"
                     />
+                    {errors.price && (
+                      <p className="text-red-500 mt-2">
+                        {errors.price.message}
+                      </p>
+                    )}
                   </div>
                   <div className="mb-4">
                     <label className="block text-sm font-bold mb-2">
                       Total de Bilhetes
                     </label>
                     <input
+                      {...register("totalBilhetes")}
                       type="number"
-                      value={formData.totalBilhetes}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          totalBilhetes: parseInt(e.target.value),
+                          totalBilhetes: Number(e.target.value),
                         })
                       }
                       className="w-full p-2 border rounded"
                     />
+                    {errors.totalBilhetes && (
+                      <p className="text-red-500 mt-2">
+                        {errors.totalBilhetes.message}
+                      </p>
+                    )}
                   </div>
                   <div className="mb-4">
                     <label className="block text-sm font-bold mb-2">
@@ -612,9 +732,8 @@ function Index() {
                           currentImageSize > maxImageSize ? "text-red-400" : ""
                         }`}
                       >
-                        Tamanho atual:{" "}
-                        {Math.round(Number(currentImageSize) / 1024).toFixed(2)}{" "}
-                        KB / {Math.round(maxImageSize / 1024)} KB
+                        Tamanho atual: {formatFileSize(currentImageSize)} /{" "}
+                        {formatFileSize(maxImageSize)}
                       </p>
                     )}
 
@@ -632,6 +751,7 @@ function Index() {
                       onClick={() => {
                         setCreatingCampaign(null);
                         clearFormFields();
+                        reset();
                       }}
                       className="bg-red-400 text-white px-4 py-2 rounded mr-2 hover:bg-red-500 transition-all"
                     >

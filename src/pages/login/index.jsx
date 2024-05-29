@@ -1,5 +1,5 @@
 // src/pages/Login.js
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../services/api"; // Atualize o caminho conforme necessário
 
@@ -8,6 +8,12 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("authToken")) {
+        return navigate("/admin")
+    }
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();

@@ -259,45 +259,43 @@ function Index() {
       "totalBilhetes",
       parseFloat(formData.totalBilhetes).toFixed(2)
     );
+
     formDataToSend.append("status", formData.status);
+    console.log(formDataToSend);
 
     if (formData.image) {
-      const reader = new FileReader();
       if (formData.image.size > 200 * 1024) {
         return;
       }
 
-      reader.readAsDataURL(formData.image);
-      reader.onloadend = async () => {
-        const base64Image = reader.result;
-        formDataToSend.append("image", base64Image);
-        try {
-          const response = await api.post("/createproduct", formDataToSend, {
-            headers: {
-              Authorization: `${token}`,
-              "Content-Type": "multipart/form-data",
-            },
-          });
+      formDataToSend.append("image", formData.image);
 
-          if (response.status === 403) {
-            setAutenticated(false);
-          } else if (response.status === 200) {
-            setAutenticated(true);
-          }
+      try {
+        const response = await api.post("/createproduct", formDataToSend, {
+          headers: {
+            Authorization: `${token}`,
+            "Content-Type": "multipart/form-data", // Ajuste o cabeçalho aqui
+          },
+        });
 
-          setProducts([...products, response.data]);
-          setCreatingCampaign(false);
-          clearFormFields();
-        } catch (error) {
+        if (response.status === 403) {
           setAutenticated(false);
+        } else if (response.status === 200) {
+          setAutenticated(true);
         }
-      };
+
+        setProducts([...products, response.data]);
+        setCreatingCampaign(false);
+        clearFormFields();
+      } catch (error) {
+        setAutenticated(false);
+      }
     } else {
       try {
         const response = await api.post("/createproduct", formDataToSend, {
           headers: {
             Authorization: `${token}`,
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
         });
         setProducts([...products, response.data]);

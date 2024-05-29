@@ -9,6 +9,23 @@ function Index() {
   const [products, setProducts] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
   const [creatingCampaign, setCreatingCampaign] = useState(false);
+  const [imageURL, setImageURL] = useState(null);
+  const [maxImageSize] = useState(70000); // Tamanho máximo em bytes (70KB)
+  const [currentImageSize, setCurrentImageSize] = useState(null);
+  
+  const [isImageOpen, setIsImageOpen] = useState(false);
+  const [clickedImage, setClickedImage] = useState(null);
+
+  const handleImageClick = (image) => {
+    setClickedImage(image);
+    setIsImageOpen(true);
+  };
+
+  const handleCloseClick = () => {
+    setIsImageOpen(false);
+    setClickedImage(null);
+  };
+
   const [formData, setFormData] = useState({
     name: "",
     price: "",
@@ -16,6 +33,18 @@ function Index() {
     status: true,
     image: null,
   });
+
+  const clearFormFields = () => {
+    setFormData({
+      name: "",
+      price: "",
+      totalBilhetes: "",
+      status: true,
+      image: null,
+    });
+    setImageURL(null);
+    setCurrentImageSize(null);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,37 +82,86 @@ function Index() {
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
     formDataToSend.append("price", formData.price);
-    formDataToSend.append("totalBilhetes", formData.totalBilhetes);
     formDataToSend.append("status", formData.status);
-    if (formData.image) {
-      formDataToSend.append("image", formData.image);
-    }
 
-    try {
-      const response = await api.put(`/updateproduct/${editingProduct._id}`, formDataToSend);
-      setProducts(products.map((product) => (product._id === editingProduct._id ? response.data : product)));
-      setEditingProduct(null);
-    } catch (error) {
-      console.log(error.message);
+    if (formData.image) {
+      const reader = new FileReader();
+      if (formData.image.size > 70000) {
+        return;
+      }
+
+      reader.readAsDataURL(formData.image);
+      reader.onloadend = async () => {
+        const base64Image = reader.result;
+        formDataToSend.append("image", base64Image);
+        try {
+          const response = await api.put(
+            `/updateproduct/${editingProduct._id}`,
+            formDataToSend
+          );
+          setProducts(
+            products.map((product) =>
+              product._id === editingProduct._id ? response.data : product
+            )
+          );
+          clearFormFields();
+          setEditingProduct(null);
+        } catch (error) {
+          console.log(error.message);
+        }
+      };
+    } else {
+      try {
+        const response = await api.put(
+          `/updateproduct/${editingProduct._id}`,
+          formDataToSend
+        );
+        setProducts(
+          products.map((product) =>
+            product._id === editingProduct._id ? response.data : product
+          )
+        );
+        setEditingProduct(null);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
   };
 
   const createCampaign = async () => {
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
-    formDataToSend.append("price", formData.price);
+    formDataToSend.append("price", parseFloat(formData.price).toFixed(2));
     formDataToSend.append("totalBilhetes", formData.totalBilhetes);
     formDataToSend.append("status", formData.status);
-    if (formData.image) {
-      formDataToSend.append("image", formData.image);
-    }
 
-    try {
-      const response = await api.post("/createproduct", formDataToSend);
-      setProducts([...products, response.data]);
-      setCreatingCampaign(false);
-    } catch (error) {
-      console.log(error.message);
+    if (formData.image) {
+      const reader = new FileReader();
+      if (formData.image.size > 70000) {
+        return;
+      }
+
+      reader.readAsDataURL(formData.image);
+      reader.onloadend = async () => {
+        const base64Image = reader.result;
+        formDataToSend.append("image", base64Image);
+        try {
+          const response = await api.post("/createproduct", formDataToSend);
+          setProducts([...products, response.data]);
+          setCreatingCampaign(false);
+          clearFormFields();
+        } catch (error) {
+          console.log(error.message);
+        }
+      };
+    } else {
+      try {
+        const response = await api.post("/createproduct", formDataToSend);
+        setProducts([...products, response.data]);
+        setCreatingCampaign(false);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
   };
 
@@ -99,7 +177,12 @@ function Index() {
         <nav className="p-10">
           <ul className="flex flex-col gap-5">
             <li className="flex gap-3 items-center text-[20px] font-semibold uppercase">
-              <IoHomeSharp /> Dashboard
+              <IoHomeSharp className="text-green-200 hover:text-green-100 transition-all" />{" "}
+              <Link to={"/admin"}>
+                <p className="select-none cursor-pointer hover:text-zinc-400 transition-all">
+                  Dashboard
+                </p>
+              </Link>
             </li>
           </ul>
         </nav>
@@ -107,20 +190,23 @@ function Index() {
       <div className="w-3/4">
         <header className="flex w-full justify-between items-center p-10 border-b-2">
           <h1 className="text-[30px] uppercase font-bold">Dashboard admin</h1>
-          <Crown size={40} />
+          <Crown
+            size={40}
+            className="cursor-pointer hover:text-yellow-600 transition-all"
+          />
         </header>
         <main className="p-10 text-black flex flex-col gap-3">
           <div className="flex gap-5 items-center justify-between">
             <h1 className="text-[30px] text-white">Minhas campanhas</h1>
             <button
-              className="text-md font-semibold uppercase bg-violet-800 px-5 py-3 rounded-md text-white transition-all hover:bg-violet-500"
+              className="select-none text-md font-semibold uppercase bg-violet-800 px-5 py-3 rounded-md text-white transition-all hover:bg-violet-500"
               onClick={() => setCreatingCampaign(true)}
             >
               Criar campanha
             </button>
           </div>
 
-          <div className="grid text-white grid-cols-6">
+          <div className="grid text-white grid-cols-6 select-none">
             <p>Campanha</p>
             <p>Valor</p>
             <p>Números vendidos</p>
@@ -133,26 +219,69 @@ function Index() {
               <section key={item._id}>
                 <div className="grid bg-zinc-300 grid-cols-6 items-center justify-center p-4 rounded-md ">
                   <div className="flex gap-2 items-center">
-                    <img src={item.image} className="w-10 rounded-sm" alt="" />
+                    <img
+                      src={item.image}
+                      className="w-10 rounded-sm cursor-pointer"
+                      alt={item.name}
+                      onClick={() => handleImageClick(item.image)}
+                    />
                     <p className="text-xs">{item.name}</p>
                   </div>
+
+                  {isImageOpen && clickedImage === item.image && (
+                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-md z-50">
+                      <div className="relative bg-white rounded-md">
+                        <img
+                          src={clickedImage}
+                          className="w-[800px] h-[500px] rounded-md"
+                          alt={item.name}
+                        />
+                        <button
+                          className="absolute top-2 right-2 text-white text-2xl bg-black rounded-full px-2"
+                          onClick={handleCloseClick}
+                        >
+                          &times;
+                        </button>
+                      </div>
+                    </div>
+                  )}
                   <p>
-                    {item.price.toLocaleString("pt-BR", {
+                    {Number(item.price).toLocaleString("pt-BR", {
                       style: "currency",
                       currency: "BRL",
                     })}
                   </p>
                   <p>
-                    {item.BilhetesVendidos} de {item.totalBilhetes}
+                    {item.BilhetesVendidos} de{" "}
+                    {Number(item.totalBilhetes).toLocaleString("pt-BR")}
                   </p>
-                  <span>{item.status ? "Ativo" : "Finalizado"}</span>
-                  <p>23-03-2023 16:03</p>
+                  <span
+                    className={`select-none w-14 h-5 sm:w-20 sm:h-5 lg:w-28 lg:h-6 flex text-white items-center justify-center rounded-md text-[8px] sm:text-sm ${
+                      item.status ? "bg-green-400" : "bg-red-400"
+                    }`}
+                  >
+                    {item.status ? "Ativo" : "Finalizado"}
+                  </span>
+                  <p>
+                    {item.createdAt
+                      ? new Date(item.createdAt).toLocaleDateString("pt-BR", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        }) +
+                        " " +
+                        new Date(item.createdAt).toLocaleTimeString("pt-BR", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                      : "N/A"}
+                  </p>
                   <div className="flex gap-5 items-center">
                     <button onClick={() => editProduct(item)}>
-                      <Pencil />
+                      <Pencil className="hover:text-green-600 transition-all" />
                     </button>
                     <button onClick={() => deleteProduct(item._id)}>
-                      <Trash />
+                      <Trash className="hover:text-red-400 transition-all" />
                     </button>
                   </div>
                 </div>
@@ -200,43 +329,83 @@ function Index() {
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-sm font-bold mb-2">Total de Bilhetes</label>
-                <input
-                  type="number"
-                  value={formData.totalBilhetes}
+                <label className="block text-sm font-bold mb-2">Status</label>
+                <select
+                  value={formData.status}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      totalBilhetes: parseInt(e.target.value),
+                      status: e.target.value === "true",
                     })
                   }
                   className="w-full p-2 border rounded"
-                />
+                >
+                  <option value="true">Ativo</option>
+                  <option value="false">Encerrado</option>
+                </select>
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-bold mb-2">Imagem</label>
                 <input
                   type="file"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      image: e.target.files[0],
-                    })
-                  }
+                  accept=".jpg, .jpeg, .png, .jfif, image/jpeg, image/png, image/jfif"
+                  onChange={(e) => {
+                    const selectedFile = e.target.files[0];
+                    if (selectedFile) {
+                      const validTypes = ["image/jpeg", "image/png"];
+                      if (validTypes.includes(selectedFile.type)) {
+                        setFormData({
+                          ...formData,
+                          image: selectedFile,
+                        });
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setImageURL(reader.result);
+                        };
+                        setCurrentImageSize(selectedFile.size);
+                        reader.readAsDataURL(selectedFile);
+                      } else {
+                        // Aqui você pode mostrar uma mensagem de erro informando que apenas imagens JPEG e PNG são aceitas
+                      }
+                    } else {
+                      setCurrentImageSize(null);
+                    }
+                  }}
                   className="w-full p-2 border rounded"
                 />
+                {currentImageSize !== null && (
+                  <p
+                    className={`text-xs mt-2 ${
+                      currentImageSize > maxImageSize ? "text-red-400" : ""
+                    }`}
+                  >
+                    Tamanho atual:{" "}
+                    {Math.round(Number(currentImageSize) / 1024).toFixed(2)} KB
+                    / {Math.round(maxImageSize / 1024)} KB
+                  </p>
+                )}
+                {imageURL && (
+                  <img
+                    src={imageURL}
+                    alt="Preview"
+                    className="mt-4 w-full max-h-80 h-auto"
+                  />
+                )}
               </div>
               <div className="flex justify-end">
                 <button
                   type="button"
-                  onClick={() => setEditingProduct(null)}
-                  className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+                  onClick={() => {
+                    setEditingProduct(null);
+                    clearFormFields();
+                  }}
+                  className="bg-red-400 text-white px-4 py-2 rounded mr-2 hover:bg-red-500 transition-all"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-all"
                 >
                   Salvar
                 </button>
@@ -282,7 +451,9 @@ function Index() {
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-sm font-bold mb-2">Total de Bilhetes</label>
+                <label className="block text-sm font-bold mb-2">
+                  Total de Bilhetes
+                </label>
                 <input
                   type="number"
                   value={formData.totalBilhetes}
@@ -299,26 +470,65 @@ function Index() {
                 <label className="block text-sm font-bold mb-2">Imagem</label>
                 <input
                   type="file"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      image: e.target.files[0],
-                    })
-                  }
+                  accept=".jpg, .jpeg, .png, .jfif, image/jpeg, image/png, image/jfif"
+                  onChange={(e) => {
+                    const selectedFile = e.target.files[0];
+                    if (selectedFile) {
+                      const validTypes = ["image/jpeg", "image/png"];
+                      if (validTypes.includes(selectedFile.type)) {
+                        setFormData({
+                          ...formData,
+                          image: selectedFile,
+                        });
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setImageURL(reader.result);
+                        };
+                        setCurrentImageSize(selectedFile.size);
+                        reader.readAsDataURL(selectedFile);
+                      } else {
+                        // Aqui você pode mostrar uma mensagem de erro informando que apenas imagens JPEG e PNG são aceitas
+                      }
+                    } else {
+                      setCurrentImageSize(null);
+                    }
+                  }}
                   className="w-full p-2 border rounded"
                 />
+                {currentImageSize !== null && (
+                  <p
+                    className={`text-xs mt-2 ${
+                      currentImageSize > maxImageSize ? "text-red-400" : ""
+                    }`}
+                  >
+                    Tamanho atual:{" "}
+                    {Math.round(Number(currentImageSize) / 1024).toFixed(2)} KB
+                    / {Math.round(maxImageSize / 1024)} KB
+                  </p>
+                )}
+
+                {imageURL && (
+                  <img
+                    src={imageURL}
+                    alt="Preview"
+                    className="mt-4 w-full max-h-80 h-auto"
+                  />
+                )}
               </div>
               <div className="flex justify-end">
                 <button
                   type="button"
-                  onClick={() => setCreatingCampaign(false)}
-                  className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+                  onClick={() => {
+                    setCreatingCampaign(null);
+                    clearFormFields();
+                  }}
+                  className="bg-red-400 text-white px-4 py-2 rounded mr-2 hover:bg-red-500 transition-all"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-all"
                 >
                   Salvar
                 </button>

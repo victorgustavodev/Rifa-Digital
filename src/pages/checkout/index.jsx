@@ -82,9 +82,9 @@ function Index() {
             </div>
           </div>
 
-          <div className="flex-1">
+          <div className="flex-1 lg:p-20">
             {product && (
-              <div className="w-full flex flex-col md:flex-row lg:p-20 ">
+              <div className="w-full flex flex-col md:flex-row shadow-md rounded-3xl ">
                 {/* left */}
                 <div className="h-full lg:w-full bg-zinc-100 flex flex-col items-center gap-3 p-6 lg:p-20 rounded-l-3xl">
                   <div className="bg-white rounded-xl p-6 border-zinc-200 flex flex-col gap-3 w-full">
@@ -155,11 +155,11 @@ function Index() {
                 </div>
                 {/* right */}
                 <div className="bg-white w-full flex flex-col gap-8 p-6 lg:p-20 lg:items-start">
-                  <div className="flex items-center rounded-xl w-full shadow-sm border-">
+                  <div className="flex items-center rounded-xl w-full shadow-md">
                     <img
                       src={product.image}
                       alt=""
-                      className="max-w-32 min-w-32"
+                      className="max-w-32 min-w-32 min-h-full"
                     />
                     <div className="p-3 flex flex-col gap-3">
                       <p className="text-base leading-tight">{product.name}</p>

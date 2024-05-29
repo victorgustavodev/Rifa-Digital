@@ -95,7 +95,7 @@ function Navbar() {
         {/* Modal */}
         {openModal && (
           <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-8 rounded-lg max-w-[300px] md:max-w-none min-h-[200px] max-h-[80vh] overflow-y-auto">
+            <div className="bg-white p-8 rounded-lg max-w-[300px] md:max-w-none min-h-[200px] max-h-[80vh] overflow-y-auto lg:min-w-[477px]">
               <h2 className="text-2xl font-bold mb-4">Ver meus bilhetes</h2>
               <input
                 type="tel"
@@ -108,11 +108,12 @@ function Navbar() {
 
               {numbersUser.length > 0 && (
                 <div>
-                  <ul>
+                  <ul >
                     {numbersUser.map((num, index) => (
-                      <li key={index}>
+                      <li key={index}> 
                         <h3>
-                          {num.name}: {num.numbers.join(", ")}
+                        Rifa: {num.name}
+                          <h3>Números Adquiridos: {num.numbers.join(", ")}</h3>
                         </h3>
                       </li>
                     ))}

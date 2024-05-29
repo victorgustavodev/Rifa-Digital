@@ -14,7 +14,7 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get("/getproducts/all");
+        const response = await api.get("/getproducts/3");
         setProducts(response.data);
         // console.log(response.data);
       } catch (error) {
@@ -35,13 +35,15 @@ export default function Home() {
             >
               <div className="max-w-[1000px] flex flex-col justify-center">
                 <div className="flex flex-col lg:flex-row gap-5">
-                  <img
-                    className="w-[345px] h-[250px] sm:w-[424px] rounded-md lg:w-[660px] lg:h-[385px]"
-                    src={item.image}
-                    alt="Product"
-                  />
+                  <div>
+                    <img
+                      className="w-[345px] h-[250px] sm:w-[424px] rounded-md lg:w-[660px] lg:h-[385px]"
+                      src={item.image}
+                      alt="Product"
+                    />
+                  </div>
                   <div className="flex flex-col gap-5 items-center ">
-                    <div className="flex flex-col gap-3 p-5 shadow-md rounded-md ">
+                    <div className="flex flex-col gap-3 p-5 shadow-md rounded-md bg-white ">
                       <p className="font-bold lg:text-3xl overflow-hidden border-b-[1px]  border-zinc-300 p-2 lg:p-4">
                         {item.name}
                       </p>
@@ -88,7 +90,7 @@ export default function Home() {
       </div>
       <>
         <div className="flex gap-2 items-center justify-center">
-          <div className="max-w-[1120px] lg:min-w-[1000px] flex gap-2 items-center">
+          <div className="120px] lg:min-w-[1000px] flex gap-2 items-center">
             <TbClover size={24} />
             <p className="font-medium text-xl py-5">Últimos Sorteios</p>
           </div>
@@ -104,10 +106,20 @@ export default function Home() {
                     alt=""
                   />
                   <div className="flex flex-col gap-3 w-4/5 bg-white border-zinc-200 rounded-md p-3">
-                    <h3 className="text-xs font-semibold max-w-[200px] sm:max-w-[250px] sm:min-h-[70px]  lg:max-w-none sm:text-lg border-b-[1px] h-3/5 border-zinc-200">
-                      {item.name}
-                    </h3>
                     <div className="flex justify-between">
+                      <h3 className="text-xs font-semibold max-w-[200px] sm:max-w-[250px] sm:min-h-[70px]  lg:max-w-none sm:text-lg h-3/5 ">
+                        {item.name}
+                      </h3>
+
+                      <h3 className="text-xs font-semibold max-w-[200px] sm:max-w-[250px] sm:min-h-[70px]  lg:max-w-none sm:text-lg h-3/5">
+                        {item.price.toLocaleString("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        })}
+                      </h3>
+                    </div>
+
+                    <div className="flex justify-between items-center">
                       <p
                         className={`w-14 h-5 sm:w-20 sm:h-5 lg:w-28 lg:h-6 flex text-white items-center justify-center rounded-md text-[8px] sm:text-sm ${
                           item.status ? "bg-green-500" : "bg-red-500"
@@ -115,6 +127,11 @@ export default function Home() {
                       >
                         {item.status ? "Ativo" : "Finalizado"}
                       </p>
+                      <Link key={item._id} to={`/item/${item._id}`}>
+                        <button className="bg-green-500 flex gap-3 justify-center items-center w-full text-white rounded-md p-1 lg:p-3 text-[10px] lg:text-[14px] transition-all hover:bg-green-600 hover:scale-[1.01]">
+                          <ShoppingBagIcon className="h-5 w-5" /> Participar
+                        </button>
+                      </Link>
                     </div>
                   </div>
                 </div>

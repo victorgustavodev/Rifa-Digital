@@ -13,7 +13,7 @@ function Login() {
     e.preventDefault();
     try {
       const response = await api.post("/login", { username, password });
-      localStorage.setItem("authToken", response.data.token); // Armazena o token recebido
+      localStorage.setItem("authToken", response.data.token);
       navigate("/admin");
     } catch (error) {
       setError("Credenciais inválidas");

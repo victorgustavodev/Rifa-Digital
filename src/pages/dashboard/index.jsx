@@ -368,7 +368,7 @@ function Index() {
                 <p>Data</p>
               </div>
 
-              {products.length > 0 ? (
+              {products && products.length > 0 ? (
                 products.map((item) => (
                   <section key={item._id}>
                     <div className="grid bg-zinc-300 grid-cols-6 items-center justify-center p-4 rounded-md ">
@@ -452,7 +452,7 @@ function Index() {
                   </section>
                 ))
               ) : (
-                <Loading />
+               <h1 className="text-center text-white text-3xl font-bold pt-5 uppercase" >Nenhum produto cadastrado!</h1>
               )}
             </main>
           </div>

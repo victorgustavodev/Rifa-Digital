@@ -21,13 +21,19 @@ api.interceptors.request.use(
 // Interceptor para tratar respostas da API
 api.interceptors.response.use(
   (response) => {
-    return response; // Retorna a resposta se estiver tudo certo
+    return response;
   },
   (error) => {
-    if (error.response && error.response.status === 401) {
-      // Se a resposta da API indicar que o token é inválido ou expirou, redireciona para a página de login
-      window.location.href = "/login";
+    
+
+    // if (error.response.status === 401) {
+    //   window.location.href = "/login";
+    // }
+
+    if (error.code === 502 || error.code === "ERR_NETWORK") {
+      window.location.href = "/unavailable";
     }
+
     return Promise.reject(error); // Retorna o erro para tratamento posterior
   }
 );

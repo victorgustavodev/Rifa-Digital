@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound/index";
 import Admin from "./pages/dashboard/index";
 import Login from "./pages/login/index"; // Importe o componente de Login
 import ProtectedRoute from "./pages/protectedRoute/index"; // Importe o componente de rota protegida
+import Unavailable from "./pages/unavailable/index"
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Admin />
           </ProtectedRoute>
         } />
+        <Route path="/unavailable" element={<Unavailable />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

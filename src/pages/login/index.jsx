@@ -10,9 +10,19 @@ function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("authToken")) {
-        return navigate("/admin")
-    }
+    const Auth = async () => {
+      const token = localStorage.getItem("authToken");
+      const response = await api.post("/auth", {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        return navigate("/admin");
+      }
+    };
+    Auth();
   }, [navigate]);
 
   const handleLogin = async (e) => {
@@ -30,7 +40,6 @@ function Login() {
     <div className="flex items-center justify-center h-screen bg-gray-900">
       <div className="bg-white p-10 rounded-md w-96">
         <h2 className="text-xl font-bold mb-4">Login</h2>
-        {error && <p className="text-red-500">{error}</p>}
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label className="block text-sm font-bold mb-2">Usuário</label>
@@ -51,6 +60,7 @@ function Login() {
               className="w-full p-2 border rounded"
               required
             />
+            {error && <p className="text-red-500 mt-2 mb-4">{error}</p>}
           </div>
           <button
             type="submit"

@@ -84,7 +84,7 @@ function Index() {
         );
 
         if (response.status === 403) {
-          setAutenticated(false);
+          navigate("/login");
         } else if (response.status === 200) {
           setAutenticated(true);
         }
@@ -97,7 +97,7 @@ function Index() {
     if (token && !Autenticated) {
       authenticateUser();
     }
-  }, [token, Autenticated, setAutenticated]);
+  }, [token, Autenticated, setAutenticated, navigate]);
 
   const [isImageOpen, setIsImageOpen] = useState(false);
   const [clickedImage, setClickedImage] = useState(null);
@@ -154,7 +154,7 @@ function Index() {
       });
 
       if (response.status === 403) {
-        setAutenticated(false);
+        navigate("/login");
       } else if (response.status === 200) {
         setAutenticated(true);
       }
@@ -205,7 +205,7 @@ function Index() {
         );
 
         if (response.status === 403) {
-          setAutenticated(false);
+          navigate("/login");
         } else if (response.status === 200) {
           setAutenticated(true);
         }
@@ -234,7 +234,7 @@ function Index() {
         );
 
         if (response.status === 403) {
-          setAutenticated(false);
+          navigate("/login");
         } else if (response.status === 200) {
           setAutenticated(true);
         }
@@ -279,7 +279,7 @@ function Index() {
         });
 
         if (response.status === 403) {
-          setAutenticated(false);
+          navigate("/login");
         } else if (response.status === 200) {
           setAutenticated(true);
         }
@@ -311,7 +311,7 @@ function Index() {
 
   return (
     <div>
-      {Autenticated ? (
+      {Autenticated === true ? (
         <div className="bg-[#0A0125] h-screen text-white flex">
           <div className="w-1/4 h-full flex flex-col border-r-2">
             <header className="p-10 w-screen border-b-2">
@@ -768,7 +768,7 @@ function Index() {
           )}
         </div>
       ) : (
-        Autenticated === false && navigate("/login")
+        <Loading />
       )}
     </div>
   );

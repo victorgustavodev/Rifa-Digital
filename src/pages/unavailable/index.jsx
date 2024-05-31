@@ -22,7 +22,7 @@ function Unavailable() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-white to-blue-200">
-      <h1 className="text-8xl md:text-9xl font-bold text-red-600 mb-4">502</h1>
+      <h1 className="text-[128px] md:text-[128px] font-bold text-red-600 mb-4">502</h1>
       <h2 className="text-3xl text-gray-800 mb-4">Bad Gateway</h2>
       <p className="text-lg text-gray-700 mb-8 text-center px-4">
         Oops! Algo deu errado. Tente recarregar a página ou volte mais tarde.

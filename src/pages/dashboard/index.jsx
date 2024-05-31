@@ -452,7 +452,11 @@ function Index() {
                   </section>
                 ))
               ) : (
-               <h1 className="text-center text-white text-3xl font-bold pt-5 uppercase" >Nenhum produto cadastrado!</h1>
+                <div className="h-full flex items-center justify-center">
+                  <h1 className="text-center text-white text-3xl font-bold pt-10 uppercase">
+                    Nenhum produto cadastrado!
+                  </h1>
+                </div>
               )}
             </main>
           </div>

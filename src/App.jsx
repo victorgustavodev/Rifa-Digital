@@ -9,6 +9,7 @@ import Admin from "./pages/dashboard/index";
 import Login from "./pages/login/index"; // Importe o componente de Login
 import ProtectedRoute from "./pages/protectedRoute/index"; // Importe o componente de rota protegida
 import Unavailable from "./pages/unavailable/index"
+import Payment from "./pages/payment/index"
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         } />
         <Route path="/unavailable" element={<Unavailable />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/payment" element={< Payment/>}/>
       </Routes>
     </BrowserRouter>
   );

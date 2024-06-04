@@ -4,19 +4,21 @@ import { BsQrCodeScan } from "react-icons/bs";
 import Code from "../../assets/qrcode.png";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { LuAlarmClock } from "react-icons/lu";
-import "../../App.css";
+import api from "../../services/api";
 
-export default function Shopping() {
-  const { phone, name, email } = useParams();
+export default async function Shopping() {
+  const { id, ammount, phone, name, email } = useParams();
   const navigate = useNavigate();
   const [time, setTime] = useState(3600); // 10 minutes in seconds
+
+
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTime((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
     }, 1000);
 
-    return () => clearInterval(timer); 
+    return () => clearInterval(timer);
   }, []);
 
   const formatTime = (seconds) => {
@@ -175,7 +177,7 @@ export default function Shopping() {
         </div>
 
         <div className="p-8">
-          <button 
+          <button
             className="bg-red-500 text-white p-2 rounded-md w-full"
             onClick={handleCancel}
           >

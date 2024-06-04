@@ -37,10 +37,19 @@ function Index() {
   const { id, ammount } = useParams();
   const [product, setProduct] = useState(null);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const { name, phone, email } = getValues();
     if (!name || !phone || !email) return;
-    router(`/payments/${id}/${phone}/${name} / ${email}`);
+
+    const { data } = await api.post("/payment", {
+      id: id,
+      ammount: ammount,
+      name: name,
+      phone: phone,
+      email: email,
+    });
+
+    router(`/payments/${data.paymentId}/${name}/${email}`);
   };
 
   const handlePhoneChange = (e) => {

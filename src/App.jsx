@@ -9,6 +9,7 @@ import Login from "./pages/login/index"; // Importe o componente de Login
 import ProtectedRoute from "./pages/protectedRoute/index"; // Importe o componente de rota protegida
 import Unavailable from "./pages/unavailable/index";
 import Payment from "./pages/payment/index";
+import CampanhaFinalizada from "./pages/campanhaFinalizada/index";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/checkout/:id/:ammount" element={<Checkout />} />
         <Route path="/payments/:encodedParams" element={<Payment />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/finalizada/:id" element={<CampanhaFinalizada/>}></Route>
         {/* Adicione a rota de login */}
         <Route
           path="/admin"

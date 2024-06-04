@@ -476,6 +476,7 @@ function Index() {
                     <input
                       {...register("name")}
                       type="text"
+                      placeholder="Ex: Nome do produto"
                       value={formData.name}
                       onChange={(e) =>
                         setFormData({ ...formData, name: e.target.value })
@@ -495,6 +496,7 @@ function Index() {
                       value={formData.price === null ? "" : formData.price}
                       type="number"
                       step="0.01"
+                      placeholder="Ex: 0,20 = R$0,20"
                       onChange={(e) =>
                         setFormData({
                           ...formData,
@@ -520,6 +522,7 @@ function Index() {
                     <input
                       {...register("totalBilhetes")}
                       type="number"
+                      placeholder="Ex: 10000 = 10000 bilhetes disponíveis"
                       value={Number(formData.totalBilhetes)}
                       onChange={(e) =>
                         setFormData({
@@ -535,6 +538,7 @@ function Index() {
                       </p>
                     )}
                   </div>
+                  
                   <div className="mb-4">
                     <label className="block text-sm font-bold mb-2">
                       Status

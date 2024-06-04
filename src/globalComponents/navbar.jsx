@@ -108,13 +108,17 @@ function Navbar() {
 
               {numbersUser.length > 0 && (
                 <div>
-                  <ul >
+                  <ul>
                     {numbersUser.map((num, index) => (
-                      <li key={index}> 
-                        <h3>
-                        Rifa: {num.name}
-                          <h3>Números Adquiridos: {num.numbers.join(", ")}</h3>
-                        </h3>
+                      <li key={index}>
+                        <div>
+                          <span>Rifa: </span>
+                          <p className="text-xl font-bold">{num.name}</p>
+                          <h3>Números Adquiridos: </h3>
+                          <p className="font-bold text-xl">
+                            {num.numbers.join(", ")}
+                          </p>
+                        </div>
                       </li>
                     ))}
                   </ul>

@@ -42,8 +42,8 @@ export default function Home() {
                       alt="Product"
                     />
                   </div>
-                  <div className="flex flex-col gap-5 items-center ">
-                    <div className="flex flex-col gap-3 p-5 shadow-md rounded-md bg-white ">
+                  <div className="flex flex-col gap-5 items-center">
+                    <div className="flex flex-col gap-3 p-5 shadow-md rounded-md bg-white w-full">
                       <p className="font-bold lg:text-3xl overflow-hidden border-b-[1px]  border-zinc-300 p-2 lg:p-4">
                         {item.name}
                       </p>
@@ -127,11 +127,20 @@ export default function Home() {
                       >
                         {item.status ? "Ativo" : "Finalizado"}
                       </p>
-                      <Link key={item._id} to={`/item/${item._id}`}>
-                        <button className="bg-green-500 flex gap-3 justify-center items-center w-full text-white rounded-md p-1 lg:p-3  text-[10px] lg:text-[14px] transition-all hover:bg-green-600 hover:scale-[1.01]">
-                          Participar
-                        </button>
-                      </Link>
+                      
+                      {item.status ? (
+                        <Link key={item._id} to={`/item/${item._id}`}>
+                          <button className="bg-green-500 flex gap-3 justify-center items-center w-full text-white rounded-md p-2 lg:p-3  text-[10px] lg:text-[14px] transition-all hover:bg-green-600 hover:scale-[1.01]">
+                            Participar
+                          </button>
+                        </Link>
+                      ) : (
+                        <Link key={item._id} to={`/finalizada/${item._id}`}>
+                          <button className="bg-green-500 flex gap-3 justify-center items-center w-full text-white rounded-md p-2 lg:p-3  text-[10px] lg:text-[14px] transition-all hover:bg-green-600 hover:scale-[1.01]">
+                            Participar
+                          </button>
+                        </Link>
+                      )}
                     </div>
                   </div>
                 </div>

@@ -85,8 +85,8 @@ export default function Shopping() {
   return (
     <div>
       {status === "pending" && (
-        <div>
-          <div className="flex justify-between p-4 items-center min-h-[77px] max-w-[1120px] w-full h-full">
+        <div className="flex flex-col justify-center items-center">
+          <div className="flex justify-between p-4 items-center min-h-[77px] lg:max-w-[552px] w-full h-full">
             <Link to={"/"}>
               <span className="uppercase text-lg font-bold">
                 Dujão du corte
@@ -97,7 +97,7 @@ export default function Shopping() {
               {formatTime(timeLeft)}
             </div>
           </div>
-          <div className="h-screen">
+          <div>
             <div className="bg-[#51a716] flex items-center justify-center flex-col p-8 gap-3">
               <div className="relative rounded-2xl flex items-center justify-center mx-auto p-2 bg-white w-14 h-14">
                 <span
@@ -161,7 +161,7 @@ export default function Shopping() {
                     value={data?.copyAndPate || ""}
                   />
                   <button
-                    className="flex items-center gap-2 bg-[#51a716] p-2 rounded-md text-white"
+                    className="flex items-center gap-2 bg-[#51a716] p-2 w-5/12 lg:w-3/12 justify-center rounded-md text-white"
                     onClick={handleCopy}
                   >
                     {showCheck ? <Check size={15} /> : <Copy size={15} />}
@@ -250,7 +250,7 @@ export default function Shopping() {
               <div className="flex justify-center gap-4">
                 <button
                   onClick={handleCancel}
-                  className="bg-[#51a716] text-white p-2 rounded-md w-[320px] mt-2"
+                  className="bg-red-500 text-white p-2 rounded-md w-[320px] mt-2"
                 >
                   Cancelar
                 </button>

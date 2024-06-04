@@ -41,15 +41,16 @@ function Index() {
     const { name, phone, email } = getValues();
     if (!name || !phone || !email) return;
 
-    const { data } = await api.post("/payment", {
-      id: id,
+    const { data } = await api.post(`/payment/${id}`, {
       ammount: ammount,
       name: name,
       phone: phone,
       email: email,
     });
-
-    router(`/payments/${data.paymentId}/${name}/${email}`);
+    
+    localStorage.setItem(`${data.paymentId}`, JSON.stringify(data));
+    const encodedParams = btoa(`${data.paymentId}/${data.rifas}/${data.price}/${phone}/${name}/${email}`);
+    router(`/payments/${encodedParams}`);
   };
 
   const handlePhoneChange = (e) => {

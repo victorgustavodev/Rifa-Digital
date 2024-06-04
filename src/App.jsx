@@ -18,8 +18,8 @@ function App() {
         <Route path="/item/:id" element={<Item />} />
         <Route path="/item-finalizado/:id" element={<ItemFinalizado />} />
         <Route path="/checkout/:id/:ammount" element={<Checkout />} />
-        <Route path="/payments/:id/:name/:email" element={<Payment />} />
-        <Route path="/login" element={<Login />} />{" "}
+        <Route path="/payments/:encodedParams" element={<Payment />} />
+        <Route path="/login" element={<Login />} />
         {/* Adicione a rota de login */}
         <Route
           path="/admin"

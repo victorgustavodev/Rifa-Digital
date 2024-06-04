@@ -128,8 +128,8 @@ export default function Home() {
                         {item.status ? "Ativo" : "Finalizado"}
                       </p>
                       <Link key={item._id} to={`/item/${item._id}`}>
-                        <button className="bg-green-500 flex gap-3 justify-center items-center w-full text-white rounded-md p-1 lg:p-3 text-[10px] lg:text-[14px] transition-all hover:bg-green-600 hover:scale-[1.01]">
-                          <ShoppingBagIcon className="h-5 w-5" /> Participar
+                        <button className="bg-green-500 flex gap-3 justify-center items-center w-full text-white rounded-md p-1 p-2 lg:p-3  text-[10px] lg:text-[14px] transition-all hover:bg-green-600 hover:scale-[1.01]">
+                          Participar
                         </button>
                       </Link>
                     </div>

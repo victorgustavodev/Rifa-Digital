@@ -14,9 +14,9 @@ const schema = z.object({
   phone: z
     .string()
     .min(11, { message: "O número de telefone fornecido é inválido." }),
-  email: z.string().regex(/^\S+@\S+\.\S+$/, {
-    message: "Informe um endereço de email valído.",
-  }),
+  email: z
+    .string()
+    .min(10, { message: "Informe um endereço de email valído." }),
 });
 
 function Index() {
@@ -40,7 +40,7 @@ function Index() {
   const onSubmit = () => {
     const { name, phone, email } = getValues();
     if (!name || !phone || !email) return;
-    router(`/payments/${id}/${phone}/${ammount / product.price}`);
+    router(`/payments/${id}/${phone}/${name} / ${email}`);
   };
 
   const handlePhoneChange = (e) => {

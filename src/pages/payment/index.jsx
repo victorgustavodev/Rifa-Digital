@@ -32,19 +32,17 @@ export default function Shopping() {
     const CheckingStatus = async () => {
       try {
         const paymentInfo = localStorage.getItem(`${id}`);
+        const { data } = await api.get(`/payment/check/${id}`);
+        setStatus(data.status.toString().toLowerCase());
         if (paymentInfo) {
-          const { data } = await api.get(`/payment/check/${id}`);
-          setStatus(data.status);
-          if (paymentInfo) {
-            setData(JSON.parse(paymentInfo));
-          }
-
-          if (data.status === "approved") {
-            localStorage.removeItem(`${id}`);
-          }
-        } else {
-          setStatus("Payment not found");
+          setData(JSON.parse(paymentInfo));
         }
+
+        if (data.status === "approved") {
+          localStorage.removeItem(`${id}`);
+          setStatus("approved");
+        }
+        
       } catch (error) {
         setStatus("Payment not found");
         localStorage.removeItem(`${id}`);
@@ -265,7 +263,7 @@ export default function Shopping() {
       {status === "approved" && (
         <div className="flex flex-col justify-center items-center h-screen">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-green-500">
+            <h1 className="text-[36px] font-bold text-green-500">
               Pagamento Aprovado!
             </h1>
             <p className="text-lg mt-4">Obrigado por sua compra.</p>
@@ -281,7 +279,7 @@ export default function Shopping() {
       {status !== "pending" && status !== "approved" && (
         <div className="flex flex-col justify-center items-center h-screen">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-red-500">Erro</h1>
+            <h1 className="text-[36px] font-bold text-red-500">Erro</h1>
             <p className="text-lg mt-4">Ocorreu um erro com o pagamento.</p>
             <Link to="/">
               <button className="bg-[#51a716] text-white p-2 rounded-md mt-4">

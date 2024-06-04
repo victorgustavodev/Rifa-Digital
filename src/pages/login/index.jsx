@@ -20,6 +20,8 @@ function Login() {
 
       if (response.status === 200) {
         return navigate("/admin");
+      } else {
+        navigate("/login");
       }
     };
     Auth();

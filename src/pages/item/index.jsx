@@ -13,7 +13,6 @@ import Footer from "../../globalComponents/Footer";
 function Item() {
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
-
   const { id } = useParams();
 
   useEffect(() => {
@@ -49,7 +48,7 @@ function Item() {
     const totalPrice = quantity * product.price;
     return totalPrice.toFixed(2);
   };
-
+  
   return (
     <div>
       <Navbar />

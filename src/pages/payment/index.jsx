@@ -158,7 +158,7 @@ export default function Shopping() {
                     onFocus={handleFocus}
                     className="appearance-none w-full outline-none no-caret"
                     type="text"
-                    value={data?.copyAndPate || ""}
+                    value={data?.copyAndPaste || ""}
                   />
                   <button
                     className="flex items-center gap-2 bg-[#51a716] p-2 w-5/12 lg:w-3/12 justify-center rounded-md text-white"

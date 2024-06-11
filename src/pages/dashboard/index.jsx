@@ -313,44 +313,44 @@ function Index() {
     <div>
       {Autenticated === true ? (
         <div className="bg-[#0A0125] h-screen text-white flex">
-          <div className="w-1/4 h-full flex flex-col border-r-2">
-            <header className="p-10 w-screen border-b-2">
+          <div className="w-[256px] h-full flex flex-col border-r-[1px]">
+            <header className="p-4 border-b-[1px]">
               <Link to={"/"}>
-                <h1 className="text-[30px] uppercase font-bold">
+                <h1 className="text-lg">
                   Dujão do corte
                 </h1>
               </Link>
             </header>
 
-            <nav className="p-10">
+            <nav className="p-4">
               <ul className="flex flex-col gap-5">
-                <li className="flex gap-3 items-center text-[20px] font-semibold uppercase">
-                  <IoHomeSharp className="text-green-200 hover:text-green-100 transition-all" />{" "}
+                <li className="flex gap-3 items-center text-base">
+                  <IoHomeSharp className=""/>
                   <Link to={"/admin"}>
                     <p className="select-none cursor-pointer hover:text-zinc-400 transition-all">
-                      Dashboard
+                      Início
                     </p>
                   </Link>
                 </li>
               </ul>
             </nav>
           </div>
-          <div className="w-3/4">
-            <header className="flex w-full justify-between items-center p-10 border-b-2">
-              <h1 className="text-[30px] uppercase font-bold">
+          <div className="w-full">
+            <header className="flex w-full justify-between items-center p-4 border-b-[1px]">
+              <h1 className="text-lg">
                 Dashboard admin
               </h1>
               <LogOutIcon
                 onClick={Logout}
-                size={40}
+                size={20}
                 className="cursor-pointer hover:text-red-400 transition-all"
               />
             </header>
-            <main className="p-10 text-black flex flex-col gap-3">
+            <main className="p-4 text-black flex flex-col gap-3">
               <div className="flex gap-5 items-center justify-between">
-                <h1 className="text-[30px] text-white">Minhas campanhas</h1>
+                <h1 className="text-lg text-white">Minhas campanhas</h1>
                 <button
-                  className="select-none text-md font-semibold uppercase bg-violet-800 px-5 py-3 rounded-md text-white transition-all hover:bg-violet-500"
+                  className="select-none text-xs font-semibold uppercase bg-violet-800 px-5 py-3 rounded-md text-white transition-all hover:bg-violet-500"
                   onClick={() => {
                     setCreatingCampaign(true);
                     reset();
@@ -367,11 +367,11 @@ function Index() {
                 <p>Status</p>
                 <p>Data</p>
               </div>
-
+                  
               {products && products.length > 0 ? (
                 products.map((item) => (
                   <section key={item._id}>
-                    <div className="grid bg-zinc-300 grid-cols-6 items-center justify-center p-4 rounded-md ">
+                    <div className="grid bg-zinc-300 grid-cols-6 items-center justify-center p-4 rounded-md">
                       <div className="flex gap-2 items-center">
                         <img
                           src={item.image}

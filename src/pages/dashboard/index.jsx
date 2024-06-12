@@ -313,33 +313,35 @@ function Index() {
     <div>
       {Autenticated === true ? (
         <div className="bg-[#0A0125] h-screen text-white flex">
-          <div className="w-[256px] h-full flex flex-col border-r-[1px]">
-            <header className="p-4 border-b-[1px]">
-              <Link to={"/"}>
-                <h1 className="text-lg">
-                  Dujão do corte
-                </h1>
-              </Link>
-            </header>
+          <div className="hidden">
+            <div className="w-[256px] h-full flex flex-col border-r-[1px]">
+              <header className="p-4 border-b-[1px]">
+                <Link to={"/"}>
+                  <h1 className="text-lg">Dujão do corte</h1>
+                </Link>
+              </header>
 
-            <nav className="p-4">
-              <ul className="flex flex-col gap-5">
-                <li className="flex gap-3 items-center text-base">
-                  <IoHomeSharp className=""/>
-                  <Link to={"/admin"}>
-                    <p className="select-none cursor-pointer hover:text-zinc-400 transition-all">
-                      Início
-                    </p>
-                  </Link>
-                </li>
-              </ul>
-            </nav>
+              <nav className="p-4">
+                <ul className="flex flex-col gap-5">
+                  <li className="flex gap-3 items-center text-base">
+                    <IoHomeSharp className="" />
+                    <Link to={"/admin"}>
+                      <p className="select-none cursor-pointer hover:text-zinc-400 transition-all">
+                        Início
+                      </p>
+                    </Link>
+                  </li>
+                </ul>
+              </nav>
+            </div>
           </div>
           <div className="w-full">
             <header className="flex w-full justify-between items-center p-4 border-b-[1px]">
-              <h1 className="text-lg">
-                Dashboard admin
-              </h1>
+                              <Link to={"/"}>
+                  <h1 className="text-lg">Dujão do corte</h1>
+                </Link>
+
+              <h1 className="text-lg lg:uppercase">Dashboard admin</h1>
               <LogOutIcon
                 onClick={Logout}
                 size={20}
@@ -350,7 +352,7 @@ function Index() {
               <div className="flex gap-5 items-center justify-between">
                 <h1 className="text-lg text-white">Minhas campanhas</h1>
                 <button
-                  className="select-none text-xs font-semibold uppercase bg-violet-800 px-5 py-3 rounded-md text-white transition-all hover:bg-violet-500"
+                  className="select-none text-[8px] lg:text-xs font-semibold uppercase bg-violet-800 px-5 py-3 rounded-md text-white transition-all hover:bg-violet-500"
                   onClick={() => {
                     setCreatingCampaign(true);
                     reset();
@@ -360,26 +362,29 @@ function Index() {
                 </button>
               </div>
 
-              <div className="grid text-white grid-cols-6 select-none">
+              <div className="grid text-[10px] text-center text-white grid-cols-6 select-none">
                 <p>Campanha</p>
                 <p>Valor</p>
                 <p>Números vendidos</p>
                 <p>Status</p>
                 <p>Data</p>
               </div>
-                  
+
               {products && products.length > 0 ? (
                 products.map((item) => (
-                  <section key={item._id}>
-                    <div className="grid bg-zinc-300 grid-cols-6 items-center justify-center p-4 rounded-md">
+                  <section
+                    key={item._id}
+                    className="text-[10px] text-center lg:text-base"
+                  >
+                    <div className="grid bg-zinc-300 grid-cols-6 items-center p-4 rounded-md">
                       <div className="flex gap-2 items-center">
                         <img
                           src={item.image}
-                          className="w-10 rounded-sm cursor-pointer"
+                          className="rounded-sm cursor-pointer w-10"
                           alt={item.name}
                           onClick={() => handleImageClick(item.image)}
                         />
-                        <p className="text-xs">{item.name}</p>
+                        <p className="text-[10px] lg:text-xs ">{item.name}</p>
                       </div>
 
                       {isImageOpen && clickedImage === item.image && (
@@ -409,13 +414,15 @@ function Index() {
                         {item.BilhetesVendidos} de{" "}
                         {Number(item.totalBilhetes).toLocaleString("pt-BR")}
                       </p>
-                      <span
-                        className={`select-none w-14 h-5 sm:w-20 sm:h-5 lg:w-28 lg:h-6 flex text-white items-center justify-center rounded-md text-[8px] sm:text-sm ${
+                      <div className="flex justify-center">
+                      <p
+                        className={`select-none w-10 h-5 sm:w-20 sm:h-5 lg:w-28 lg:h-6 flex justify-center items-center text-white rounded-md text-[8px] sm:text-sm ${
                           item.status ? "bg-green-400" : "bg-red-400"
                         }`}
                       >
                         {item.status ? "Ativo" : "Finalizado"}
-                      </span>
+                      </p>
+                      </div>
                       <p>
                         {item.createdAt
                           ? new Date(item.createdAt).toLocaleDateString(
@@ -423,7 +430,7 @@ function Index() {
                               {
                                 day: "2-digit",
                                 month: "2-digit",
-                                year: "numeric",
+                                year: "2-digit",
                               }
                             ) +
                             " " +
@@ -436,16 +443,16 @@ function Index() {
                             )
                           : "N/A"}
                       </p>
-                      <div className="flex gap-5 items-center">
+                      <div className="flex gap-2 lg:gap-5 items-center">
                         <button
                           onClick={() => {
                             editProduct(item);
                           }}
                         >
-                          <Pencil className="hover:text-green-600 transition-all" />
+                          <Pencil className="hover:text-green-600 transition-all w-full" />
                         </button>
                         <button onClick={() => deleteProduct(item._id)}>
-                          <Trash className="hover:text-red-400 transition-all" />
+                          <Trash className="hover:text-red-400 transition-all w-full" />
                         </button>
                       </div>
                     </div>
@@ -463,7 +470,7 @@ function Index() {
 
           {editingProduct && (
             <div className="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center">
-              <div className="bg-white p-10 rounded-md text-black w-1/2">
+              <div className="bg-white p-10 rounded-md text-black  w-full lg:w-1/2">
                 <h2 className="text-xl font-bold mb-4">Editar Produto</h2>
                 <form
                   onSubmit={(e) => {
@@ -538,7 +545,7 @@ function Index() {
                       </p>
                     )}
                   </div>
-                  
+
                   <div className="mb-4">
                     <label className="block text-sm font-bold mb-2">
                       Status
@@ -632,8 +639,10 @@ function Index() {
 
           {creatingCampaign && (
             <div className="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center">
-              <div className="bg-white p-10 rounded-md text-black w-1/2">
-                <h2 className="text-xl font-bold mb-4">Criar Nova Campanha</h2>
+              <div className="bg-white p-10 rounded-md text-black w-full lg:w-1/2">
+                <h2 className="text-center lg:text-xl font-bold mb-4">
+                  Criar Nova Campanha
+                </h2>
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();

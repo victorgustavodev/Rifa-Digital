@@ -6,6 +6,7 @@ import api from "../../services/api";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { Lock } from "lucide-react";
 
 const schema = z.object({
   name: z
@@ -47,9 +48,11 @@ function Index() {
       phone: phone,
       email: email,
     });
-    
+
     localStorage.setItem(`${data.paymentId}`, JSON.stringify(data));
-    const encodedParams = btoa(`${data.paymentId}/${data.rifas}/${data.price}/${phone}/${name}/${email}`);
+    const encodedParams = btoa(
+      `${data.paymentId}/${data.rifas}/${data.price}/${phone}/${name}/${email}`
+    );
     router(`/payments/${encodedParams}`);
   };
 
@@ -104,22 +107,22 @@ function Index() {
                     </span>
 
                     <form onSubmit={handleSubmit(onSubmit)}>
-                      <div className="flex flex-col gap-4 mb-6">
-                        <label className="font-semibold">Nome Completo</label>
+                      <div className="flex flex-col gap-2 lg:gap-4 mb-6">
+                        <label className="text-xs lg:text-base font-semibold">Nome Completo</label>
                         <input
                           {...register("name")}
                           type="text"
                           placeholder="Digite seu nome e sobrenome"
-                          className="w-full bg-zinc-100 rounded-md p-2"
+                          className="w-full bg-zinc-100 rounded-md text-xs lg:text-base p-2"
                         />
                         {errors.name && (
-                          <p className="text-red-500 mt-2">
+                          <p className="text-red-500 mt-2 text-xs lg:text-base">
                             {errors.name.message}
                           </p>
                         )}
                       </div>
-                      <div className="flex flex-col gap-4 mb-6">
-                        <label className="font-semibold">
+                      <div className="flex flex-col gap-2 lg:gap-4 mb-6">
+                        <label className="font-semibold text-xs lg:text-base">
                           Telefone com DDD
                         </label>
                         <input
@@ -128,26 +131,26 @@ function Index() {
                           placeholder="(81) 12345-6789"
                           value={phone}
                           onChange={handlePhoneChange}
-                          className="w-full bg-zinc-100 rounded-md p-2"
+                          className="w-full bg-zinc-100 rounded-md p-2 text-xs lg:text-base"
                         />
                         {errors.phone && (
-                          <p className="text-red-500 mt-2">
+                          <p className="text-red-500 mt-2 text-xs lg:text-base">
                             {errors.phone.message}
                           </p>
                         )}
                       </div>
-                      <div className="flex flex-col gap-4 mb-6">
-                        <label className="font-semibold">
+                      <div className="flex flex-col gap-2 lg:gap-4 mb-6">
+                        <label className="font-semibold text-xs lg:text-base">
                           Endereço de e-mail
                         </label>
                         <input
                           {...register("email")}
                           type="email"
                           placeholder="Digite seu e-mail"
-                          className="w-full bg-zinc-100 rounded-md p-2"
+                          className="w-full bg-zinc-100 rounded-md p-2 text-xs lg:text-base"
                         />
                         {errors.email && (
-                          <p className="text-red-500 mt-2">
+                          <p className="text-red-500 mt-2 text-xs lg:text-base">
                             {errors.email.message}
                           </p>
                         )}
@@ -155,7 +158,7 @@ function Index() {
                       <div className="pt-3 lg:pt-10 flex w-full justify-end">
                         <button
                           type="submit"
-                          className="bg-[#1877F2] text-white w-full md:w-auto p-3 transition-all rounded-xl border border-zinc-300 hover:brightness-110"
+                          className="bg-[#1877F2] text-white w-full md:w-auto p-3 transition-all rounded-xl border border-zinc-300 hover:brightness-110 text-xs lg:text-base"
                         >
                           Continuar
                         </button>
@@ -164,7 +167,7 @@ function Index() {
                   </div>
                 </div>
                 {/* right */}
-                <div className="bg-white w-full flex flex-col gap-8 p-6 lg:p-20 lg:items-start">
+                <div className="bg-white w-full flex flex-col justify-between gap-8 p-6 lg:p-20 lg:items-start">
                   <div className="flex items-center rounded-xl w-full shadow-md">
                     <img
                       src={product.image}
@@ -178,7 +181,7 @@ function Index() {
                   </div>
                   <div className="flex gap-5 flex-col w-full">
                     <div className="flex flex-col gap-3 items-end lg:items-end">
-                      <p>Forma de pagamento disponível:</p>
+                      <p>Formas de pagamento:</p>
                       <img
                         src="https://logopng.com.br/logos/pix-106.svg"
                         alt=""
@@ -207,6 +210,15 @@ function Index() {
                       </span>
                     </div>
                   </div>
+                  <div className="flex w-full justify-center text-center items-center gap-2 text-zinc-400">
+                      <Lock color="#52525b"/>
+                      <span>
+                        <p className="uppercase font-bold text-zinc-600">
+                          Checkout
+                        </p>
+                        <p className="text-xs">100% seguro</p>
+                      </span>
+                    </div>
                 </div>
               </div>
             )}

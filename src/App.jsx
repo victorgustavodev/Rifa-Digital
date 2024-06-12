@@ -11,6 +11,7 @@ import Unavailable from "./pages/unavailable/index";
 import Payment from "./pages/payment/index";
 import CampanhaFinalizada from "./pages/campanhaFinalizada/index";
 import BilhetesComprados from "./pages/visualizarBilhetesComprados"
+import Campanhas from "./pages/campanhas/index"
 
 function App() {
   return (
@@ -23,7 +24,8 @@ function App() {
         <Route path="/payments/:encodedParams" element={<Payment />} />
         <Route path="/login" element={<Login />} />
         <Route path="/finalizada/:id" element={<CampanhaFinalizada/>}></Route>
-        <Route path="/asd" element={<BilhetesComprados/>}></Route>
+        <Route path="/meusbilhetes" element={<BilhetesComprados/>}></Route>
+        <Route path="/campanhas" element={<Campanhas/>}></Route>
 
         {/* Adicione a rota de login */}
         <Route

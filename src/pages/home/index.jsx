@@ -16,16 +16,17 @@ export default function Home() {
       try {
         const response = await api.get("/getproducts/3");
         setProducts(response.data);
-        // console.log(response.data);
       } catch (error) {
         console.log(error.message);
       }
     };
     fetchData();
   }, []);
+
   return (
     <div className="flex flex-col bg-zinc-100">
       <Navbar />
+
       <div>
         {products.length > 0 ? (
           products.slice(0, 1).map((item) => (
@@ -44,7 +45,7 @@ export default function Home() {
                   </div>
                   <div className="flex flex-col gap-5 items-center">
                     <div className="flex flex-col gap-3 p-5 shadow-md rounded-md bg-white w-full">
-                      <p className="font-bold lg:text-3xl overflow-hidden border-b-[1px]  border-zinc-300 p-2 lg:p-4">
+                      <p className="font-bold lg:text-3xl overflow-hidden border-b-[1px] border-zinc-300 p-2 lg:p-4">
                         {item.name}
                       </p>
                       <span className="flex gap-3 text-gray-500 items-center p-2 lg:p-4">
@@ -57,7 +58,7 @@ export default function Home() {
                         </span>
                       </span>
                       <Link key={item._id} to={`/item/${item._id}`}>
-                        <button className="bg-green-500 flex gap-3 justify-center items-center w-full text-white rounded-md p-3 text-md transition-all hover:bg-green-600 hover:scale-[1.01]">
+                        <button className="bg-green-500 flex gap-3 justify-center items-center w-full text-white rounded-md p-3 text-md transition-all hover:bg-green-600">
                           <ShoppingBagIcon className="h-5 w-5" /> Participar da
                           Campanha
                         </button>
@@ -88,69 +89,60 @@ export default function Home() {
           </section>
         )}
       </div>
+
       <>
         <div className="flex gap-2 items-center justify-center">
-          <div className="120px] lg:min-w-[1000px] flex gap-2 items-center">
+          <div className="120px] lg:min-w-[1000px] flex gap-1 items-center">
             <TbClover size={24} />
             <p className="font-medium text-xl py-5">Últimos Sorteios</p>
           </div>
         </div>
-        {products.length > 0 ? (
-          products.map((item) => (
-            <section key={item._id} className="w-screen flex justify-center">
-              <div className="max-w-[1120px] lg:min-w-[1000px] flex flex-col sm:gap-5">
-                <div className="flex gap-2 sm:gap-4 md:gap-6 w-[345px] h-[100px] sm:w-[422px] sm:h-auto lg:w-auto items-center py-5 overflow-hidden">
+        <div className="flex justify-center">
+          {products.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[1120px] lg:min-w-[1000px] p-4">
+              {products.map((item) => (
+                <Link
+                  key={item._id}
+                  to={item.status ? `/item/${item._id}` : `/finalizada/${item._id}`}
+                  className="relative hover:bg-zinc-200 transition-all flex flex-col sm:gap-1 bg-white border-zinc-200 max-w-[300px] rounded-md overflow-hidden"
+                >
+                  <div
+                    className={`absolute top-2 left-2 py-2 px-4 rounded-md font-semibold text-white text-sm ${
+                      item.status ? "bg-green-500" : "bg-red-500"
+                    }`}
+                  >
+                    {item.status ? "Ativo" : "Finalizado"}
+                  </div>
+
                   <img
-                    className="w-[88px] h-[62px] sm:w-[150px] sm:h-[116px] lg:w-[200px] lg:h-[142px] rounded-md"
+                    className="w-full h-48 object-cover"
                     src={item.image}
-                    alt=""
+                    alt={item.name}
                   />
-                  <div className="flex flex-col gap-3 w-4/5 bg-white border-zinc-200 rounded-md p-3">
-                    <div className="flex justify-between">
-                      <h3 className="text-xs font-semibold max-w-[200px] sm:max-w-[250px] sm:min-h-[70px]  lg:max-w-none sm:text-lg h-3/5 ">
+                  <div className="flex flex-col gap-1 p-3">
+                    <div className="flex justify-between items-center">
+                      <h3 className="text-sm font-semibold sm:text-lg">
                         {item.name}
                       </h3>
-
-                      <h3 className="text-xs font-semibold max-w-[200px] sm:max-w-[250px] sm:min-h-[70px]  lg:max-w-none sm:text-lg h-3/5">
+                    </div>
+                    <div className="flex items-center">
+                      <h3 className="text-sm font-semibold sm:text-lg">
                         {item.price.toLocaleString("pt-BR", {
                           style: "currency",
                           currency: "BRL",
                         })}
                       </h3>
                     </div>
-
-                    <div className="flex justify-between items-center">
-                      <p
-                        className={`w-14 h-5 sm:w-20 sm:h-5 lg:w-28 lg:h-6 flex text-white items-center justify-center rounded-md text-[8px] sm:text-sm ${
-                          item.status ? "bg-green-500" : "bg-red-500"
-                        }`}
-                      >
-                        {item.status ? "Ativo" : "Finalizado"}
-                      </p>
-                      
-                      {item.status ? (
-                        <Link key={item._id} to={`/item/${item._id}`}>
-                          <button className="bg-green-500 flex gap-3 justify-center items-center w-full text-white rounded-md p-2 lg:p-3  text-[10px] lg:text-[14px] transition-all hover:bg-green-600 hover:scale-[1.01]">
-                            Participar
-                          </button>
-                        </Link>
-                      ) : (
-                        <Link key={item._id} to={`/finalizada/${item._id}`}>
-                          <button className="bg-green-500 flex gap-3 justify-center items-center w-full text-white rounded-md p-2 lg:p-3  text-[10px] lg:text-[14px] transition-all hover:bg-green-600 hover:scale-[1.01]">
-                            Participar
-                          </button>
-                        </Link>
-                      )}
-                    </div>
                   </div>
-                </div>
-              </div>
-            </section>
-          ))
-        ) : (
-          <Loading />
-        )}
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <Loading />
+          )}
+        </div>
       </>
+
       <BtnWhatsapp />
       <Footer />
     </div>

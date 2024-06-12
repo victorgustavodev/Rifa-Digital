@@ -60,17 +60,20 @@ function Navbar() {
         <div className="hidden sm:block">
           <div className="flex gap-5">
             <div className="hidden sm:block">
-              <button
+              <Link
+                to="/meusbilhetes"
                 className="flex gap-2 text-black bg-zinc-200 rounded-xl p-3 text-sm font-semibold transition-all hover:bg-zinc-300"
-                onClick={toggleModal}
               >
                 <ShoppingCart size={20} /> Ver meus bilhetes
-              </button>
+              </Link>
             </div>
             <div className="hidden sm:block">
-              <button className="flex gap-2 bg-zinc-200 rounded-xl p-3 text-sm font-semibold transition-all hover:bg-zinc-300">
+              <Link
+                to="/campanhas"
+                className="flex gap-2 bg-zinc-200 rounded-xl p-3 text-sm font-semibold transition-all hover:bg-zinc-300"
+              >
                 <Megaphone size={20} /> Campanhas
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -79,15 +82,19 @@ function Navbar() {
         {menuOpen && (
           <div className="sm:hidden absolute right-0 top-[77px] bg-zinc-100 w-screen h-screen">
             <div className="flex flex-col items-center py-10 gap-5 h-3/5 px-10">
-              <button
+              <Link
+                to="/meusbilhetes"
                 className="flex gap-2 text-black bg-zinc-200 rounded-xl p-5 text-base font-semibold transition-all w-full hover:bg-zinc-300"
-                onClick={toggleModal}
               >
                 <ShoppingCart size={20} /> Ver meus bilhetes
-              </button>
-              <button className="flex gap-2 bg-zinc-200 rounded-xl p-5 text-base font-semibold transition-all w-full hover:bg-zinc-300">
+              </Link>
+
+              <Link
+                to="/campanhas"
+                className="flex gap-2 bg-zinc-200 rounded-xl p-5 text-base font-semibold transition-all w-full hover:bg-zinc-300"
+              >
                 <Megaphone size={20} /> Campanhas
-              </button>
+              </Link>
             </div>
           </div>
         )}

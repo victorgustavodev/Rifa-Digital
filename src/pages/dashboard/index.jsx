@@ -78,18 +78,17 @@ function Index() {
           {
             headers: {
               Authorization: `${token}`,
-              "Content-Type": "application/json",
             },
           }
         );
-
-        if (response.status === 403) {
-          navigate("/login");
-        } else if (response.status === 200) {
+        if (response.status === 200) {
           setAutenticated(true);
         }
       } catch (error) {
-        console.log(error.message);
+        if (error.response.status === 403) {
+          localStorage.removeItem("authToken");
+          navigate("/login");
+        }
         setAutenticated(false);
       }
     };
@@ -337,9 +336,9 @@ function Index() {
           </div>
           <div className="w-full">
             <header className="flex w-full justify-between items-center p-4 border-b-[1px]">
-                              <Link to={"/"}>
-                  <h1 className="text-lg">Dujão do corte</h1>
-                </Link>
+              <Link to={"/"}>
+                <h1 className="text-lg">Dujão do corte</h1>
+              </Link>
 
               <h1 className="text-lg lg:uppercase">Dashboard admin</h1>
               <LogOutIcon
@@ -415,13 +414,13 @@ function Index() {
                         {Number(item.totalBilhetes).toLocaleString("pt-BR")}
                       </p>
                       <div className="flex justify-center">
-                      <p
-                        className={`select-none w-10 h-5 sm:w-20 sm:h-5 lg:w-28 lg:h-6 flex justify-center items-center text-white rounded-md text-[8px] sm:text-sm ${
-                          item.status ? "bg-green-400" : "bg-red-400"
-                        }`}
-                      >
-                        {item.status ? "Ativo" : "Finalizado"}
-                      </p>
+                        <p
+                          className={`select-none w-10 h-5 sm:w-20 sm:h-5 lg:w-28 lg:h-6 flex justify-center items-center text-white rounded-md text-[8px] sm:text-sm ${
+                            item.status ? "bg-green-400" : "bg-red-400"
+                          }`}
+                        >
+                          {item.status ? "Ativo" : "Finalizado"}
+                        </p>
                       </div>
                       <p>
                         {item.createdAt

@@ -49,7 +49,7 @@ function Index() {
       email: email,
     });
 
-    localStorage.setItem(`${data.paymentId}`, JSON.stringify(data));
+    localStorage.setItem(`${data.paymentId}`, btoa(JSON.stringify(data)));
     const encodedParams = btoa(
       `${data.paymentId}/${data.rifas}/${data.price}/${phone}/${name}/${email}`
     );
@@ -108,7 +108,9 @@ function Index() {
 
                     <form onSubmit={handleSubmit(onSubmit)}>
                       <div className="flex flex-col gap-2 lg:gap-4 mb-6">
-                        <label className="text-xs lg:text-base font-semibold">Nome Completo</label>
+                        <label className="text-xs lg:text-base font-semibold">
+                          Nome Completo
+                        </label>
                         <input
                           {...register("name")}
                           type="text"
@@ -211,14 +213,14 @@ function Index() {
                     </div>
                   </div>
                   <div className="flex w-full justify-center text-center items-center gap-2 text-zinc-400">
-                      <Lock color="#52525b"/>
-                      <span>
-                        <p className="uppercase font-bold text-zinc-600">
-                          Checkout
-                        </p>
-                        <p className="text-xs">100% seguro</p>
-                      </span>
-                    </div>
+                    <Lock color="#52525b" />
+                    <span>
+                      <p className="uppercase font-bold text-zinc-600">
+                        Checkout
+                      </p>
+                      <p className="text-xs">100% seguro</p>
+                    </span>
+                  </div>
                 </div>
               </div>
             )}

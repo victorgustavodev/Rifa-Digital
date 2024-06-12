@@ -31,9 +31,9 @@ export default function Shopping() {
   useEffect(() => {
     const CheckingStatus = async () => {
       try {
-        const paymentInfo = localStorage.getItem(`${id}`);
+        const paymentInfo = atob(localStorage.getItem(`${id}`));
         const { data } = await api.get(`/payment/check/${id}`);
-        setStatus(data.status.toString().toLowerCase());
+        setStatus(data.status);
         if (paymentInfo) {
           setData(JSON.parse(paymentInfo));
         }
@@ -42,7 +42,6 @@ export default function Shopping() {
           localStorage.removeItem(`${id}`);
           setStatus("approved");
         }
-        
       } catch (error) {
         setStatus("Payment not found");
         localStorage.removeItem(`${id}`);

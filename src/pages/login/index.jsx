@@ -7,25 +7,35 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [token, setToken] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    const Auth = async () => {
-      const token = localStorage.getItem("authToken");
-      const response = await api.post("/auth", {
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
+    const token = localStorage.getItem("authToken");
+    setToken(token);
+  }, [token]);
 
-      if (response.status === 200) {
-        return navigate("/admin");
-      } else {
-        navigate("/login");
+  useEffect(() => {
+    const Auth = async () => {
+      try {
+        const response = await api.post(
+          "/auth",
+          {},
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          return navigate("/admin");
+        }
+      } catch (error) {
+        console.log(error);
       }
     };
     Auth();
-  }, [navigate]);
+  }, [navigate, token]);
 
   const handleLogin = async (e) => {
     e.preventDefault();

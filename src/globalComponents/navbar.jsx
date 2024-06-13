@@ -1,4 +1,4 @@
-import { Megaphone, Menu, ShoppingCart, X } from "lucide-react";
+import { Menu, ShoppingCart, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
@@ -47,7 +47,7 @@ function Navbar() {
 
   return (
     <div className="flex justify-center items-center border-b-[0.5px] border-gray-200 bg-white z-50">
-      <div className="flex justify-between p-4 items-center min-h-[77px] max-w-[1120px] w-full h-full">
+      <div className="flex justify-between p-4 items-center min-h-[77px] max-w-[1000px] w-full h-full">
         <Link to={"/"}>
           <span className="uppercase text-lg font-bold">dujão du corte</span>
         </Link>
@@ -67,14 +67,6 @@ function Navbar() {
                 <ShoppingCart size={20} /> Ver meus bilhetes
               </Link>
             </div>
-            <div className="hidden sm:block">
-              <Link
-                to="/campanhas"
-                className="flex gap-2 bg-zinc-200 rounded-xl p-3 text-sm font-semibold transition-all hover:bg-zinc-300"
-              >
-                <Megaphone size={20} /> Campanhas
-              </Link>
-            </div>
           </div>
         </div>
 
@@ -87,13 +79,6 @@ function Navbar() {
                 className="flex gap-2 text-black bg-zinc-200 rounded-xl p-5 text-base font-semibold transition-all w-full hover:bg-zinc-300"
               >
                 <ShoppingCart size={20} /> Ver meus bilhetes
-              </Link>
-
-              <Link
-                to="/campanhas"
-                className="flex gap-2 bg-zinc-200 rounded-xl p-5 text-base font-semibold transition-all w-full hover:bg-zinc-300"
-              >
-                <Megaphone size={20} /> Campanhas
               </Link>
             </div>
           </div>

@@ -38,7 +38,7 @@ function Item() {
             <div className="flex flex-col gap-8 justify-center">
               <div className="flex flex-col gap-2 bg-white rounded-md">
                 <div className="flex gap-5">
-                  <img className="rounded-md lg:w-full" src={product.image} />
+                  <img className="rounded-md lg:w-full object-cover max-h-96" src={product.image} />
                 </div>
                 <div className="flex flex-col gap-3 h-1/2 font-semibold border-zinc-400 p-3">
                   <p className="font-bold lg:text-3xl overflow-hidden border-b-[1px] border-zinc-300 p-2 lg:p-4">

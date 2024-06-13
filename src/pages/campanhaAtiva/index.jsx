@@ -31,6 +31,8 @@ function Item() {
     getProduct();
   }, [id, Navigate]);
 
+  const url = `https://dujao-du-corte.vercel.app/${id}`;
+
   const handleAdd = (value) => {
     setQuantity(quantity + value);
   };
@@ -81,7 +83,7 @@ function Item() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-center gap-3">
+              {/* <div className="flex items-center justify-center gap-3">
                 <span className="text-center font-bold">Compartilhar</span>
                 <div className="flex gap-2 items-center">
                   <a href="" className="hover:scale-90">
@@ -94,6 +96,51 @@ function Item() {
                     <PiTelegramLogo size={24} />
                   </a>
                   <a href="" className="hover:scale-90">
+                    <BsTwitterX size={24} />
+                  </a>
+                </div>
+              </div> */}
+              <div className="flex items-center justify-center gap-3">
+                <span className="text-center font-bold">Compartilhar</span>
+                <div className="flex gap-2 items-center">
+                  <a
+                    href={`https://api.whatsapp.com/send?text=Confira%20este%20site%3A%20${encodeURIComponent(
+                      url
+                    )}`}
+                    className="hover:scale-90"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <BsWhatsapp color="green" size={24} />
+                  </a>
+                  <a
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                      url
+                    )}`}
+                    className="hover:scale-90"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <FaFacebookSquare color="#3B579D" size={24} />
+                  </a>
+                  <a
+                    href={`https://t.me/share/url?url=${encodeURIComponent(
+                      url
+                    )}`}
+                    className="hover:scale-90"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <PiTelegramLogo size={24} />
+                  </a>
+                  <a
+                    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
+                      url
+                    )}&text=Confira%20este%20site`}
+                    className="hover:scale-90"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <BsTwitterX size={24} />
                   </a>
                 </div>

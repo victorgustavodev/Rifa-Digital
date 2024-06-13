@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import Navbar from "../../globalComponents/navbar";
@@ -14,18 +14,22 @@ function Item() {
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
   const { id } = useParams();
+  const Navigate = useNavigate();
 
   useEffect(() => {
     const getProduct = async () => {
       try {
         const response = await api.get(`/findproducts/${id}`);
         setProduct(response.data);
+        if (!response.data.status) {
+          Navigate(`/finalizada/${id}`);
+        }
       } catch (error) {
         console.log(error.message);
       }
     };
     getProduct();
-  }, [id]);
+  }, [id, Navigate]);
 
   const handleAdd = (value) => {
     setQuantity(quantity + value);

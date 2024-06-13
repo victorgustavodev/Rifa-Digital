@@ -84,7 +84,7 @@ function Index() {
                     </div>
                     <div className="flex flex-col items-center gap-4 mb-4">
                       <img
-                        src="https://oportaln10.com.br/motos/wp-content/uploads/2023/07/honda-xre-300-abs-wmimagem12185140126.jpg"
+                        src={num.image}
                         alt="Car Image"
                         className="w-24 lg:w-full pt-3 lg:pt-0 rounded-md shadow-sm"
                       />

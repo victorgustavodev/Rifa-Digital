@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import Navbar from "../../globalComponents/navbar";
@@ -15,18 +15,23 @@ function Item() {
   const [product, setProduct] = useState(null);
 
   const { id } = useParams();
+  const Navigate = useNavigate();
+
 
   useEffect(() => {
     const getProduct = async () => {
       try {
         const response = await api.get(`/findproducts/${id}`);
         setProduct(response.data);
+        if (response.data.status) {
+          Navigate(`/item/${id}`);
+        }
       } catch (error) {
         console.log(error.message);
       }
     };
     getProduct();
-  }, [id]);
+  }, [id, Navigate]);
   return (
     <div>
       <ConfettiPage />

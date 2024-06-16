@@ -312,12 +312,15 @@ function Index() {
       {Autenticated === true ? (
         <div className="bg-[#0A0125] h-screen text-white flex">
           <div className="w-full">
-            <header className="flex justify-center items-center p-4 border-b-[1px]">
+            <header className="flex justify-center items-center py-4 border-b-[1px]">
               <div className="w-4/5 flex justify-between items-center">
                 <Link to={"/"}>
-                  <h1 className="text-lg">Dujão do corte</h1>
+                  <h1 className="text-md lg:text-lg">Dujão do corte</h1>
                 </Link>
-
+                <div className="flex gap-3 font-bold">
+                  <Link to="/admin">Minhas campanhas</Link>
+                  <Link to="/admin/ganhador">Dados Usuários</Link>
+                </div>
                 <LogOutIcon
                   onClick={Logout}
                   size={20}
@@ -350,7 +353,7 @@ function Index() {
                           <div className="flex gap-2 items-center justify-center">
                             <img
                               src={item.image}
-                              className="rounded-md cursor-pointer w-full h-[200px]"
+                              className="rounded-md cursor-pointer w-full h-[200px] object-cover"
                               alt={item.name}
                               onClick={() => handleImageClick(item.image)}
                             />
@@ -392,10 +395,10 @@ function Index() {
                             {item.BilhetesVendidos} de{" "}
                             {Number(item.totalBilhetes).toLocaleString("pt-BR")}
                           </p>
-                          <p className={"text-base font-bold"}>
+                          <p className={`text-base font-bold`}>
                             <div className="flex gap-1">
                               <p>Status da rifa: </p>{" "}
-                              <span>
+                              <span className={`${item.status ? 'text-green-700' : 'text-red-700'}`}>
                                 {item.status ? "Ativo" : "Finalizado"}
                               </span>
                             </div>

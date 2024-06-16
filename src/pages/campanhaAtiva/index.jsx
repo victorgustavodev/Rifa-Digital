@@ -2,7 +2,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import Navbar from "../../globalComponents/navbar";
-import { ShoppingCart, Star, TicketIcon } from "lucide-react";
+import { ShoppingCart, TicketIcon } from "lucide-react";
 import { BsTwitterX, BsWhatsapp } from "react-icons/bs";
 import { FaFacebookSquare } from "react-icons/fa";
 import { PiTelegramLogo } from "react-icons/pi";
@@ -62,24 +62,73 @@ function Item() {
         <div className="py-6 px-2 bg-zinc-100 justify-center flex">
           <div className="w-[420px] lg:w-[700px]">
             <div className="flex flex-col gap-8 justify-center">
-              <div className="flex flex-col">
+              <div className="flex flex-col m-4 shadow-lg rounded-2xl">
                 <img
-                  className="rounded-md lg:w-full object-cover max-h-96"
+                  className="lg:rounded-t-lg rounded-t-2xl lg:w-full object-cover max-h-96"
                   src={product.image}
                 />
-                <div className="flex flex-col font-semibold border-zinc-400 bg-white rounded-md">
-                  <p className="font-bold text-xl lg:text-3xl overflow-hidden border-b-[1px] border-zinc-300 p-2 lg:p-4">
+                <div className="flex flex-col font-semibold border-zinc-400 bg-white rounded-b-2xl lg:rounded-b-lg">
+                  <p className="font-bold text-xl lg:text-3xl overflow-hidden border-b-[1px] border-zinc-300 p-2 lg:p-6">
                     {product.name}
                   </p>
-                  <span className="flex gap-3 text-gray-500 items-center p-2 lg:p-4">
-                    Por apenas
-                    <span className="text-black w-[73px] h-[26px] flex items-center">
-                      {product.price.toLocaleString("pt-BR", {
-                        style: "currency",
-                        currency: "BRL",
-                      })}
+                  <div className="flex w-full flex-col lg:flex-row lg:justify-between lg:items-center">
+                    <span className="flex gap-[5px] text-gray-500 items-center pt-4 px-2 lg:p-6">
+                      Por apenas
+                      <span className="text-black w-[73px] h-[26px] flex items-center">
+                        {product.price.toLocaleString("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        })}
+                      </span>
                     </span>
-                  </span>
+                    <div className="flex lg:items-center lg:justify-center gap-3 p-2 lg:p-4">
+                      <span className="text-center font-bold">
+                        Compartilhar
+                      </span>
+                      <div className="flex gap-2 items-center">
+                        <a
+                          href={`https://api.whatsapp.com/send?text=Confira%20este%20site%3A%20${encodeURIComponent(
+                            url
+                          )}`}
+                          className="hover:scale-90"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <BsWhatsapp color="green" size={20} />
+                        </a>
+                        <a
+                          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                            url
+                          )}`}
+                          className="hover:scale-90"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <FaFacebookSquare color="#3B579D" size={20} />
+                        </a>
+                        <a
+                          href={`https://t.me/share/url?url=${encodeURIComponent(
+                            url
+                          )}`}
+                          className="hover:scale-90"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <PiTelegramLogo size={20} />
+                        </a>
+                        <a
+                          href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
+                            url
+                          )}&text=Confira%20este%20site`}
+                          className="hover:scale-90"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <BsTwitterX size={20} />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -100,52 +149,7 @@ function Item() {
                   </a>
                 </div>
               </div> */}
-              <div className="flex items-center justify-center gap-3">
-                <span className="text-center font-bold">Compartilhar</span>
-                <div className="flex gap-2 items-center">
-                  <a
-                    href={`https://api.whatsapp.com/send?text=Confira%20este%20site%3A%20${encodeURIComponent(
-                      url
-                    )}`}
-                    className="hover:scale-90"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <BsWhatsapp color="green" size={24} />
-                  </a>
-                  <a
-                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-                      url
-                    )}`}
-                    className="hover:scale-90"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <FaFacebookSquare color="#3B579D" size={24} />
-                  </a>
-                  <a
-                    href={`https://t.me/share/url?url=${encodeURIComponent(
-                      url
-                    )}`}
-                    className="hover:scale-90"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <PiTelegramLogo size={24} />
-                  </a>
-                  <a
-                    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
-                      url
-                    )}&text=Confira%20este%20site`}
-                    className="hover:scale-90"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <BsTwitterX size={24} />
-                  </a>
-                </div>
-              </div>
-              <div className="flex flex-col gap-5 bg-white p-4 md:p-10 rounded-md">
+              <div className="flex flex-col gap-5 bg-white p-4 md:p-10 rounded-md m-4 shadow-lg">
                 <div className="flex gap-2">
                   <TicketIcon />
                   <h3 className="font-bold">Bilhetes</h3>
@@ -218,7 +222,7 @@ function Item() {
                   </span>
                 </Link>
               </div>
-              <div className="flex flex-col gap-5 bg-white p-4 md:p-10 rounded-md">
+              {/* <div className="flex flex-col gap-5 bg-white p-4 md:p-10 rounded-md">
                 <div className="flex flex-col gap-2 ">
                   <div className="flex gap-1 ">
                     <Star />
@@ -238,7 +242,7 @@ function Item() {
                     </p>
                   ))}
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

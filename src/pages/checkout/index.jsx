@@ -1,5 +1,5 @@
 import { BsPerson } from "react-icons/bs";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Footer from "./../../globalComponents/Footer";
 import api from "../../services/api";
@@ -7,6 +7,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Lock } from "lucide-react";
+import Navbar from "./../../globalComponents/navbar";
 
 const schema = z.object({
   name: z
@@ -85,15 +86,7 @@ function Index() {
     <div>
       {product ? (
         <div className="flex flex-col min-h-screen">
-          <div className="flex justify-center items-center border-b-[1px] border-zinc-200 bg-white z-50">
-            <div className="flex justify-between p-4 items-center min-h-[77px] max-w-[1120px] w-full h-full">
-              <Link to={"/"}>
-                <span className="uppercase text-lg font-bold">
-                  dujão du corte
-                </span>
-              </Link>
-            </div>
-          </div>
+          <Navbar />
 
           <div className="flex-1 lg:p-20">
             {product && (

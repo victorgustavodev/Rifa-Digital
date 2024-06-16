@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/home";
-import Campanhas from "./pages/campanhas/index";
 import CampanhaAtiva from "./pages/campanhaAtiva/index";
 import CampanhaFinalizada from "./pages/campanhaFinalizada/index";
 import BilhetesComprados from "./pages/visualizarBilhetesComprados";
@@ -11,6 +10,7 @@ import Login from "./pages/login/index"; // Importe o componente de Login
 import ProtectedRoute from "./pages/protectedRoute/index"; // Importe o componente de rota protegida
 import Unavailable from "./pages/unavailable/index";
 import Payment from "./pages/payment/index";
+import DashboardDados from "./pages/dashboardGanhador/index"
 
 function App() {
   return (
@@ -23,14 +23,19 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/finalizada/:id" element={<CampanhaFinalizada />}></Route>
         <Route path="/meusbilhetes" element={<BilhetesComprados />}></Route>
-        <Route path="/campanhas" element={<Campanhas />}></Route>
-
-        {/* Adicione a rota de login */}
         <Route
           path="/admin"
           element={
             <ProtectedRoute>
               <Admin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/ganhador"
+          element={
+            <ProtectedRoute>
+              <DashboardDados />
             </ProtectedRoute>
           }
         />

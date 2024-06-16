@@ -15,6 +15,10 @@ const schema = z.object({
     (a) => parseFloat(z.string().parse(a)),
     z.number().min(0.1, { message: "Informe um preço válido, maior que 0." })
   ),
+  cota: z.preprocess(
+    (a) => parseFloat(z.string().parse(a)),
+    z.number().min(0.1, { message: "Informe uma cota válida, maior que 0." })
+  ),
   totalBilhetes: z.preprocess(
     (a) => parseFloat(z.string().parse(a)),
     z.number().min(1000, {
@@ -35,7 +39,7 @@ function Index() {
     resolver: zodResolver(schema),
   });
 
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(null);
   const [editingProduct, setEditingProduct] = useState(null);
   const [creatingCampaign, setCreatingCampaign] = useState(false);
   const [imageURL, setImageURL] = useState(null);
@@ -113,6 +117,7 @@ function Index() {
   const [formData, setFormData] = useState({
     name: "",
     price: "",
+    cota: "",
     totalBilhetes: "",
     status: true,
     image: null,
@@ -121,6 +126,7 @@ function Index() {
   const clearFormFields = () => {
     setFormData({
       name: "",
+      cota: "",
       price: "",
       totalBilhetes: "",
       status: true,
@@ -167,6 +173,7 @@ function Index() {
     setFormData({
       name: product.name,
       price: product.price,
+      cota: product.cotaPremiada,
       totalBilhetes: product.totalBilhetes,
       status: product.status,
       image: null,
@@ -177,6 +184,7 @@ function Index() {
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
     formDataToSend.append("price", parseFloat(formData.price).toFixed(2));
+    formDataToSend.append("cota", parseFloat(formData.cota).toFixed(2));
     formDataToSend.append("status", formData.status);
     formDataToSend.append(
       "totalBilhetes",
@@ -253,6 +261,7 @@ function Index() {
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
     formDataToSend.append("price", parseFloat(formData.price).toFixed(2));
+    formDataToSend.append("cota", parseFloat(formData.cota).toFixed(2));
     formDataToSend.append(
       "totalBilhetes",
       parseFloat(formData.totalBilhetes).toFixed(2)
@@ -395,11 +404,24 @@ function Index() {
                             {item.BilhetesVendidos} de{" "}
                             {Number(item.totalBilhetes).toLocaleString("pt-BR")}
                           </p>
+                          <p className="text-base font-bold ">
+                            <span>Valor da cota: </span>
+                            {Number(item.cotaPremiada).toLocaleString("pt-BR", {
+                              style: "currency",
+                              currency: "BRL",
+                            })}
+                          </p>
                           <p className={`text-base font-bold`}>
                             <div className="flex gap-1">
                               <p>Status da rifa: </p>{" "}
-                              <span className={`${item.status ? 'text-green-700' : 'text-red-700'}`}>
-                                {item.status ? "Ativo" : "Finalizado"}
+                              <span
+                                className={`${
+                                  item.status
+                                    ? "text-green-700"
+                                    : "text-red-700"
+                                }`}
+                              >
+                                {item.status ? "Ativa" : "Finalizada"}
                               </span>
                             </div>
                           </p>
@@ -427,7 +449,7 @@ function Index() {
                           </p>
                           <div className="flex gap-2 lg:gap-5 items-center pt-5 justify-end">
                             <button
-                              className="text-base font-bold uppercase text-violet-950"
+                              className="text-base font-bold uppercase text-violet-950 hover:text-violet-900 transition-all"
                               onClick={() => {
                                 editProduct(item);
                               }}
@@ -435,7 +457,7 @@ function Index() {
                               Editar
                             </button>
                             <button
-                              className="text-base font-bold uppercase text-violet-950"
+                              className="text-base font-bold uppercase text-violet-950 hover:text-violet-900 transition-all"
                               onClick={() => deleteProduct(item._id)}
                             >
                               Deletar
@@ -447,7 +469,7 @@ function Index() {
                   ) : (
                     <div className="h-full flex items-center justify-center">
                       <h1 className="text-center text-white text-3xl font-bold pt-10 uppercase">
-                        Nenhum produto cadastrado!
+                        {products ? "Nenhum produto cadastrado!" : <Loading />}
                       </h1>
                     </div>
                   )}
@@ -503,11 +525,34 @@ function Index() {
                       }
                       className="w-full p-2 border rounded"
                     />
-
                     {errors.price && (
                       <p className="text-red-500 mt-2">
                         {errors.price.message}
                       </p>
+                    )}
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-sm font-bold mb-2">
+                      Cota premiada
+                    </label>
+                    <input
+                      {...register("cota")}
+                      type="number"
+                      value={formData.cota === null ? "" : formData.cota}
+                      step="0.01"
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          cota:
+                            e.target.value === ""
+                              ? null
+                              : Number(e.target.value),
+                        })
+                      }
+                      className="w-full p-2 border rounded"
+                    />
+                    {errors.cota && (
+                      <p className="text-red-500 mt-2">{errors.cota.message}</p>
                     )}
                   </div>
                   <div className="mb-4">
@@ -548,8 +593,8 @@ function Index() {
                       }
                       className="w-full p-2 border rounded"
                     >
-                      <option value="true">Ativo</option>
-                      <option value="false">Encerrado</option>
+                      <option value="true">Ativa</option>
+                      <option value="false">Encerrada</option>
                     </select>
                   </div>
                   <div className="mb-4">
@@ -675,6 +720,28 @@ function Index() {
                       <p className="text-red-500 mt-2">
                         {errors.price.message}
                       </p>
+                    )}
+                    <div className="mb-4"></div>
+                    <label className="block text-sm font-bold mb-2">
+                      Valor das cotas
+                    </label>
+                    <input
+                      {...register("cota")}
+                      type="number"
+                      step="0.01"
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          cota:
+                            e.target.value === ""
+                              ? null
+                              : Number(e.target.value),
+                        })
+                      }
+                      className="w-full p-2 border rounded"
+                    />
+                    {errors.cota && (
+                      <p className="text-red-500 mt-2">{errors.cota.message}</p>
                     )}
                   </div>
                   <div className="mb-4">

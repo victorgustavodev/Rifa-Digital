@@ -2,7 +2,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import Navbar from "../../globalComponents/navbar";
-import { ShoppingCart, TicketIcon } from "lucide-react";
+import { ShoppingCart, Star, TicketIcon } from "lucide-react";
 import { BsTwitterX, BsWhatsapp } from "react-icons/bs";
 import { FaFacebookSquare } from "react-icons/fa";
 import { PiTelegramLogo } from "react-icons/pi";
@@ -21,6 +21,7 @@ function Item() {
       try {
         const response = await api.get(`/findproducts/${id}`);
         setProduct(response.data);
+        console.log(response.data);
         if (!response.data.status) {
           Navigate(`/finalizada/${id}`);
         }
@@ -222,27 +223,44 @@ function Item() {
                   </span>
                 </Link>
               </div>
-              {/* <div className="flex flex-col gap-5 bg-white p-4 md:p-10 rounded-md">
+              <div className="flex flex-col gap-5 bg-white p-4 md:p-10 rounded-md">
                 <div className="flex flex-col gap-2 ">
                   <div className="flex gap-1 ">
                     <Star />
                     <p className="font-semibold">Cotas Premiadas</p>
                   </div>
-                  <p>
-                    Cada bilhete vale <b>*valorCotaPremiada*</b>
-                  </p>
-                </div>
-                <div className="grid grid-cols-3 grid-rows-2 gap-2  px-2 md:px-10">
-                  {product.bilhetesPremiados.map((item) => (
-                    <p
-                      className="p-2 bg-[#089616] text-white text-center rounded-2xl text-sm md:text-base"
-                      key={item}
-                    >
-                      {item}
+                  {product && (
+                    <p>
+                      Cada bilhete vale{" "}
+                      <b>
+                        {product.cotaPremiada.toLocaleString("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        })}
+                      </b>
                     </p>
-                  ))}
+                  )}
                 </div>
-              </div> */}
+
+                <div>
+                  {product && product.bilhetesPremiados.length > 0 ? (
+                    <div className="grid grid-cols-3 grid-rows-2 gap-2 px-2 md:px-10">
+                      {product.bilhetesPremiados.map((item, index) => (
+                        <p
+                          className="p-2 bg-[#089616] text-white text-center rounded-2xl text-sm md:text-base"
+                          key={index}
+                        >
+                          {item}
+                        </p>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="font-semibold">
+                      Ainda não possui nenhum bilhete premiado.
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
